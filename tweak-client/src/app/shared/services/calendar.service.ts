@@ -11,32 +11,13 @@ export enum WeekGenerationType {
   providedIn: 'root',
 })
 export class CalendarService {
-  private readonly currentWeekStartDate: Date = new Date(
-    new Date().setDate(new Date().getDate() - new Date().getDay() + 1)
-  );
-  // new Date(
-  //   new Date().setDate(new Date().getDate() - new Date().getDay() + 1)
-  // ); // new Date();
+  private currentWeekStartDate: Date;
+  private weekStartDate: Date;
+  private weekEndDate: Date;
 
-  private weekStartDate: Date = new Date(
-    new Date().setDate(new Date().getDate() - new Date().getDay() + 1)
-  );
-  private weekEndDate: Date = new Date(
-    new Date().setDate(this.currentWeekStartDate.getDate() + 6)
-  );
   private readonly MONTHS_MAPPING = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
   ];
 
   private monthWithYearSubject: BehaviorSubject<string>;
@@ -46,92 +27,68 @@ export class CalendarService {
   public calenderWeek$: Observable<Array<Date>>;
 
   constructor() {
+    this.currentWeekStartDate = this.getMonday(new Date());
+    this.weekStartDate = new Date(this.currentWeekStartDate);
+    this.weekEndDate = this.addDays(this.weekStartDate, 6);
+
     this.calendarWeekSubject = new BehaviorSubject<Array<Date>>(
-      this.generateDatesForCurrentWeek()
+      this.generateWeek(this.weekStartDate)
     );
     this.calenderWeek$ = this.calendarWeekSubject.asObservable();
 
-    this.monthWithYearSubject = new BehaviorSubject(
-      this.getCurrentMonthWithYear()
-    );
+    this.monthWithYearSubject = new BehaviorSubject(this.getCurrentMonthWithYear());
     this.monthWithYear$ = this.monthWithYearSubject.asObservable();
   }
 
   public generateWeekDates(type: WeekGenerationType) {
     if (type === WeekGenerationType.CURRENT) {
-      this.calendarWeekSubject.next(this.generateDatesForCurrentWeek());
+      this.weekStartDate = new Date(this.currentWeekStartDate);
     } else if (type === WeekGenerationType.NEXT_WEEK) {
-      this.calendarWeekSubject.next(this.generateNextWeekDates());
-    } else {
-      this.calendarWeekSubject.next(this.generatePastWeekDates());
+      this.weekStartDate = this.addDays(this.weekStartDate, 7);
+    } else if (type === WeekGenerationType.PAST_WEEK) {
+      this.weekStartDate = this.addDays(this.weekStartDate, -7);
     }
+
+    this.weekEndDate = this.addDays(this.weekStartDate, 6);
+    this.calendarWeekSubject.next(this.generateWeek(this.weekStartDate));
+    this.monthWithYearSubject.next(this.getCurrentMonthWithYear());
   }
 
-  private generateNextWeekDates() {
-    this.weekStartDate = this.weekEndDate;
+  // --- Helper Methods ---
 
-    const weekStartsAt = new Date(
-      this.weekEndDate.setDate(this.weekEndDate.getDate() + 1)
-    );
-
+  private generateWeek(start: Date): Array<Date> {
     const dates: Array<Date> = [];
     for (let i = 0; i < 7; i++) {
-      const dd = new Date(weekStartsAt);
-      dd.setDate(dd.getDate() + i);
-      dates.push(dd);
-    }
-
-    this.weekStartDate = dates[0];
-    this.weekEndDate = dates[6];
-
-    this.monthWithYearSubject.next(this.getCurrentMonthWithYear());
-    return dates;
-  }
-
-  private generatePastWeekDates() {
-    const weekStartsAt = new Date(
-      this.weekStartDate.setDate(
-        this.weekStartDate.getDate() - this.weekStartDate.getDay() + 1
-      )
-    );
-
-    const dates: Array<Date> = [];
-
-    for (let i = 7; i >= 1; i--) {
-      const dd = new Date(weekStartsAt);
-      dd.setDate(dd.getDate() - i);
-      dates.push(dd);
-    }
-
-    this.weekStartDate = dates[0];
-    this.weekEndDate = dates[6];
-
-    this.monthWithYearSubject.next(this.getCurrentMonthWithYear());
-    return dates;
-  }
-
-  private generateDatesForCurrentWeek() {
-    const dates: Array<Date> = [];
-    for (let i = 0; i < 7; i++) {
-      dates.push(this.getDate(i));
+      dates.push(this.addDays(start, i));
     }
     return dates;
   }
 
-  private getDate(inc = 0) {
-    return new Date(
-      new Date().setDate(new Date(this.currentWeekStartDate).getDate() + inc)
-    );
+  private getMonday(d: Date): Date {
+    d = new Date(d);
+    var day = d.getDay(),
+      diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+    const monday = new Date(d.setDate(diff));
+    monday.setHours(0, 0, 0, 0); // normalize time
+    return monday;
+  }
+
+  private addDays(date: Date, days: number): Date {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
   }
 
   private getCurrentMonth(): string {
+    // If the week spans two months, show the month of the Thursday (middle of week)
+    // or just the Start Date's month for simplicity. Tweek usually shows Start Date month.
     const monthIndex: number = this.weekStartDate.getMonth();
     return this.MONTHS_MAPPING[monthIndex];
   }
 
   public getCurrentMonthWithYear(): string {
     const month = this.getCurrentMonth();
-    const year = new Date().getFullYear();
+    const year = this.weekStartDate.getFullYear(); // Use the week's year, not today's
     return `${month} ${year}`;
   }
 }

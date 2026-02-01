@@ -21,7 +21,7 @@ export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signupWithUsernamePassword(
     createUserDto: CreateUserDto,
@@ -43,7 +43,7 @@ export class AuthService {
       const accessToken: string = this.jwtService.sign(payload);
       return { accessToken };
     } catch (error: any) {
-      return error;
+      throw error;
     }
   }
 
@@ -70,7 +70,7 @@ export class AuthService {
       const accessToken: string = this.jwtService.sign(payload);
       return { accessToken };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 }

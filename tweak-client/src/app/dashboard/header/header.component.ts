@@ -6,6 +6,7 @@ import {
   WeekGenerationType,
 } from 'src/app/shared/services/calendar.service';
 import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-header',
@@ -38,12 +39,13 @@ import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.ser
       </div>
       <div class="m-auto flex-1"></div>
 
-      <div class="m-auto">
-        <button [matMenuTriggerFor]="menu">@{{ currentUsername }} 👋 </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="onLogout()">Log out</button>
-        </mat-menu>
-      </div>
+        <div class="m-auto">
+          <button [matMenuTriggerFor]="menu">@{{ currentUsername }} 👋 </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onRollover()">Move Unfinished Tasks</button>
+            <button mat-menu-item (click)="onLogout()">Log out</button>
+          </mat-menu>
+        </div>
     </div>
   `,
   styleUrls: ['./header.component.css'],
@@ -82,15 +84,31 @@ export class HeaderComponent implements OnInit {
   constructor(
     private readonly authService: AuthService,
     private readonly calendarService: CalendarService,
-    private readonly weekSchedulerService: WeekSchedulerService
+    private readonly weekSchedulerService: WeekSchedulerService,
+    private snackbar: MatSnackBar
   ) {
     this.currentUsername = this.authService.userAuthState.username;
     this.monthWithYear$ = this.calendarService.monthWithYear$;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onLogout() {
     this.authService.logout();
+  }
+
+  onRollover() {
+    this.weekSchedulerService.triggerRollover().subscribe((response: any) => {
+      const count = response.count || 0;
+      const message =
+        count > 0
+          ? `🚀 Rollover complete! Moved ${count} tasks to today.`
+          : '✅ No unfinished tasks to move.';
+
+      this.snackbar.open(message, 'Done', {
+        duration: 3000,
+        panelClass: ['bg-indigo-700', 'text-white'],
+      });
+    });
   }
 }

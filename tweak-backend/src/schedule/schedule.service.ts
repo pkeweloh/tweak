@@ -11,7 +11,7 @@ export class ScheduleService {
   constructor(
     @InjectModel(Schedule.name)
     private readonly scheduleModel: Model<ScheduleDocument>,
-  ) {}
+  ) { }
 
   async create(
     createScheduleDto: CreateScheduleDto,
@@ -70,6 +70,27 @@ export class ScheduleService {
   async remove(id: string) {
     await this.scheduleModel.findByIdAndRemove(id);
     return { data: `schedule ${id} has been removed!` };
+  }
+
+  async rollover(user: User) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const result = await this.scheduleModel.updateMany(
+      {
+        username: user.username,
+        finished: false,
+        date: { $lt: today },
+      },
+      {
+        $set: { date: today },
+      },
+    );
+
+    return {
+      data: `Rollover complete. Moved ${result.modifiedCount} tasks to today.`,
+      count: result.modifiedCount,
+    };
   }
 
   // PRIVATE METHODS

@@ -169,7 +169,7 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         const { redirectTo } = this.route.snapshot.queryParams;
         this.form.reset();
-        window.location.replace(redirectTo);
+        window.location.replace(redirectTo || '/');
         this.snackbar.open('You are logged in', 'Done', {
           duration: 3000,
         });
