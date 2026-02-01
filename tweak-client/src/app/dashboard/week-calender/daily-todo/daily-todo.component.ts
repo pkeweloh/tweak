@@ -93,7 +93,7 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
       const d = data[this.date.toDateString()];
       this.works = d ? [...d] : [];
 
-      this.editForms = []; // CLEAR OUT OLD FORMS TO PREVENT INDEX MISMATCH
+      this.editForms = [];
       this.works.forEach((work) =>
         this.editForms.push(this.createNewForm({ ...work }))
       );
