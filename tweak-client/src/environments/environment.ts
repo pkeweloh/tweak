@@ -4,8 +4,6 @@
 
 export const environment = {
   production: false,
-  BACKEND_URI: `http://localhost:1337`,
-  // BACKEND_URI: `https://tweak-planner-backend.herokuapp.com`,
 };
 
 /*

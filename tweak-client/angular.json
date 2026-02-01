@@ -72,7 +72,8 @@
               "browserTarget": "tweak-client:build:production"
             },
             "development": {
-              "browserTarget": "tweak-client:build:development"
+              "browserTarget": "tweak-client:build:development",
+              "proxyConfig": "proxy.conf.js"
             }
           },
           "defaultConfiguration": "development"

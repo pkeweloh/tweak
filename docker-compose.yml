@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: tweak-backend
+    restart: always
+    build:
+      context: .
+      dockerfile: tweak-backend/Dockerfile
+    ports:
+      - "1337:1337"
+    networks:
+      - tweak-net
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
+    volumes:
+      - ./tweak-backend:/app
+      - /app/node_modules
+
+  frontend:
+    container_name: tweak-frontend
+    restart: always
+    build:
+      context: .
+      dockerfile: tweak-client/Dockerfile
+    ports:
+      - "4200:4200"
+    networks:
+      - tweak-net
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    volumes:
+      - ./tweak-client:/app
+      - /app/node_modules
+
+  mongodb:
+    restart: always
+    image: mongo:5.0
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - tweak-net
+
+volumes:
+  mongodb_data:
+
+
+networks:
+  tweak-net:
+    driver: bridge
