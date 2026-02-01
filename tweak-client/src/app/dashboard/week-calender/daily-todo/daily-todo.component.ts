@@ -82,7 +82,7 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
     private dragDropService: DragSropShareService
-  ) {}
+  ) { }
 
   getUniqueId(work: Schedule) {
     return `ID@${work._id}@${work.date}`;
@@ -93,12 +93,13 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
       const d = data[this.date.toDateString()];
       this.works = d ? [...d] : [];
 
+      this.editForms = [];
       this.works.forEach((work) =>
         this.editForms.push(this.createNewForm({ ...work }))
       );
     });
   }
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void { }
 
   private createNewForm(work: Schedule): FormGroup {
     const editForm: FormGroup = new FormGroup({
