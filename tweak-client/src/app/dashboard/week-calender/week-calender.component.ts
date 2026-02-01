@@ -60,7 +60,7 @@ export class WeekCalenderComponent implements OnInit {
     private calendarService: CalendarService,
     private snackbar: MatSnackBar,
     private dragDropService: DragSropShareService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.registerSubscriptions(() =>
@@ -92,14 +92,12 @@ export class WeekCalenderComponent implements OnInit {
   }
 
   setTodaysColor(date: Date) {
-    console.log(date);
     return date.toDateString() === new Date().toDateString()
       ? ' text-indigo-700 border-indigo-700 font-semibold'
       : ' text-gray-800 border-black';
   }
 
   setTodaysColorByOpacity(date: Date) {
-    console.log(date);
     return date.toDateString() === new Date().toDateString()
       ? ' text-indigo-500'
       : ' text-gray-400';

@@ -9,7 +9,7 @@ import {
   Subscription,
   tap,
 } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 import { Schedule, WeeklySchedulesInterface } from '../utils/types.utils';
 import { AuthService } from './auth.service';
 import { CalendarService } from './calendar.service';
@@ -56,19 +56,28 @@ export class WeekSchedulerService implements OnDestroy {
   }
 
   createSchedule(createSchedule: Partial<Schedule>) {
+    const payload = {
+      ...createSchedule,
+      date: this.toServerDate(new Date(createSchedule.date!)),
+    };
     return this.http
-      .post(`/api/schedules/create`, createSchedule)
+      .post(`/api/schedules/create`, payload)
       .pipe(tap(() => this.refreshState()));
   }
 
   getSchedules() {
     const { startDate, endDate } = this.getStartAndEndDate();
 
+    if (!startDate || !endDate) {
+      console.warn(`[getSchedules]: Deferred - dates not ready yet.`);
+      return;
+    }
+
     return this.http
       .get(`/api/schedules/find-by-week`, {
         params: {
-          from: startDate.toISOString(),
-          to: endDate.toISOString(),
+          from: this.toServerDate(startDate),
+          to: this.toServerDate(endDate),
         },
       })
       .pipe(shareReplay())
@@ -84,9 +93,11 @@ export class WeekSchedulerService implements OnDestroy {
           }
         },
         error: (error) => {
-          console.error(`Error was: ${error.error}`);
-          this.authService.logout();
-          window.location.replace('/');
+          console.error(`[getSchedules Error]:`, error);
+          if (error.status === 401) {
+            this.authService.logout();
+            window.location.replace('/');
+          }
         },
       });
   }
@@ -127,7 +138,7 @@ export class WeekSchedulerService implements OnDestroy {
     return this.http
       .patch(
         `/api/schedules/update-date`,
-        { newDate: dateTobePushed },
+        { newDate: this.toServerDate(new Date(dateTobePushed)) },
         {
           params: { id: scheduleId },
         }
@@ -140,10 +151,30 @@ export class WeekSchedulerService implements OnDestroy {
       );
   }
 
+  triggerRollover() {
+    return this.http.post(`/api/schedules/rollover`, {}).pipe(
+      tap(() => {
+        this.refreshState();
+      })
+    );
+  }
+
   private getStartAndEndDate() {
     return {
       startDate: this.dates[0],
       endDate: this.dates[this.dates.length - 1],
     };
+  }
+
+  /**
+   * Helper to format Date to YYYY-MM-DD using Local Time
+   * This avoids UTC shifting when sending to backend.
+   */
+  private toServerDate(date: Date): string {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const day = d.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

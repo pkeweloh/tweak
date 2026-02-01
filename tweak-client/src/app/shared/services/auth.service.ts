@@ -27,11 +27,11 @@ export class AuthService {
     this.userSubject = new BehaviorSubject<AuthState>(
       JSON.parse(
         localStorage.getItem('user') ||
-          JSON.stringify({
-            accesToken: '',
-            isAuthenticated: false,
-            username: '',
-          })
+        JSON.stringify({
+          accessToken: '',
+          isAuthenticated: false,
+          username: '',
+        })
       )
     );
 

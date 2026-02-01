@@ -18,7 +18,7 @@ import { ScheduleService } from './schedule.service';
 @Controller('schedules')
 @UseGuards(AuthGuard())
 export class ScheduleController {
-  constructor(private readonly scheduleService: ScheduleService) {}
+  constructor(private readonly scheduleService: ScheduleService) { }
 
   @Post('create')
   create(@Body() createScheduleDto: CreateScheduleDto, @GetUser() user: User) {
@@ -63,5 +63,10 @@ export class ScheduleController {
   @Delete('delete')
   remove(@Query('id') id: string) {
     return this.scheduleService.remove(id);
+  }
+
+  @Post('rollover')
+  async rollover(@GetUser() user: User) {
+    return await this.scheduleService.rollover(user);
   }
 }
