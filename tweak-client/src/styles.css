@@ -1,23 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* SuisseIntl Font - Book (Regular) Weight */
 @font-face {
-  font-family: "Product Sans";
+  font-family: "SuisseIntl";
   font-style: normal;
   font-weight: 400;
-  src: local("Product Sans Medium"), local("ProductSans-Medium"),
-    url(https://fonts.gstatic.com/s/productsans/v9/pxicypQkot1TnFhsFMOfGShd5PSbT2lB.woff2)
-      format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
-    U+FEFF, U+FFFD;
+  font-display: swap;
+  src: url("/assets/fonts/SuisseIntl-Book.woff") format("woff");
+}
+
+/* SuisseIntl Font - Bold Weight */
+@font-face {
+  font-family: "SuisseIntl";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/fonts/SuisseIntl-Bold.woff") format("woff");
 }
 
 html,
 body {
   height: 100%;
 }
+
+:root {
+  /* Font family - Using SuisseIntl from tweek.so */
+  --tweek-font-family: "SuisseIntl";
+
+  /* Tweek.so color palette */
+  --tweek-bg-primary: #ffffff;
+  --tweek-text-primary: #000000;
+  --tweek-text-secondary: #666666;
+  --tweek-border-color: #e0e0e0;
+  --tweek-accent-primary: #5167F4;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: var(--tweek-font-family);
+  font-size: 15px;
+  background-color: var(--tweek-bg-primary);
+  color: var(--tweek-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
