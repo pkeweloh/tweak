@@ -10,35 +10,61 @@ import { Schedule } from 'src/app/shared/utils/types.utils';
     <form
       [formGroup]="addForm"
       (ngSubmit)="onSubmit()"
-      *ngFor="let a of [0, 1, 2, 3, 4, 5, 6]; let index"
-      [class]="getStyle2(index)"
+      class="flex flex-col w-full h-full"
     >
-      <input
-        formControlName="todo"
-        name="todo"
-        autocomplete="false"
-        type="text"
-        *ngIf="index === 0"
-        [class]="getStyle1(index)"
-        placeholder="Add your today's action!"
-        autocomplete="false"
-        aria-autocomplete="none"
-      />
+      <div class="relative w-full h-full input-wrapper">
+        <input
+          formControlName="todo"
+          name="todo"
+          autocomplete="false"
+          aria-autocomplete="none"
+          type="text"
+          (blur)="onSubmit()"
+          class="outline-none border-none h-full px-3 text-sm font-medium w-full bg-transparent text-gray-800"
+          placeholder=""
+        />
+      </div>
     </form>
   `,
-  styles: [],
+  styles: [`
+    .input-wrapper:focus-within::before {
+      content: "";
+      position: absolute;
+      top: -2px;
+      right: -8px;
+      left: -8px;
+      bottom: -2px;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px 1px #0000001c;
+      background-color: var(--input-active--background);
+      pointer-events: none;
+    }
+  `],
 })
 export class AddFormComponent implements OnInit {
   @Input() date!: Date;
-  constructor(private readonly weeklyScheduleService: WeekSchedulerService, private snackbar: MatSnackBar) {}
+  constructor(private readonly weeklyScheduleService: WeekSchedulerService, private snackbar: MatSnackBar) { }
+
+  isSubmitting = false;
 
   addForm: FormGroup = new FormGroup({
     todo: new FormControl(null),
   });
 
   onSubmit() {
-    const formData: Schedule = {
-      ...this.addForm.value,
+    if (this.isSubmitting) return;
+
+    const todo = this.addForm.get('todo')?.value;
+    if (!todo || todo.trim() === '') {
+      return;
+    }
+
+    this.isSubmitting = true;
+    const taskText = todo.trim();
+    this.addForm.reset();
+
+    const formData: Partial<Schedule> = {
+      todo: taskText,
       date: this.date,
       colorCode: '0',
       finished: false,
@@ -46,28 +72,17 @@ export class AddFormComponent implements OnInit {
 
     this.weeklyScheduleService
       .createSchedule(formData)
-      .subscribe((response) => {
-        this.snackbar.open(`New schedule has been created!`, 'Cancel', {duration: 3000});
-        this.addForm.reset();
+      .subscribe({
+        next: (response) => {
+          this.snackbar.open(`New schedule has been created!`, 'Cancel', { duration: 3000 });
+          this.isSubmitting = false;
+        },
+        error: (err) => {
+          console.error('Failed to create schedule', err);
+          this.isSubmitting = false;
+        }
       });
   }
 
-  ngOnInit(): void {}
-
-  /**
-   * getStyle
-   */
-  public getStyle1(index: number) {
-    const styles =
-      'outline-none border-none truncate focus:bg-gray-50 focus:z-50';
-
-    return index === 0 ? styles + ' py-2' : styles;
-  }
-
-  public getStyle2(index: number) {
-    const styles =
-      'flex-col flex justify-start space-y-2 border-b hover:border-indigo-600';
-
-    return index === 0 ? styles : styles + ' py-5';
-  }
+  ngOnInit(): void { }
 }

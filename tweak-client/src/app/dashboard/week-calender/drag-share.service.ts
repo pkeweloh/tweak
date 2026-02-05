@@ -10,19 +10,11 @@ export class DragSropShareService implements OnInit {
   constructor(
     private weekScheduleService: WeekSchedulerService,
     private snackBar: MatSnackBar
-  ) {}
-  ngOnInit(): void {}
+  ) { }
+  ngOnInit(): void { }
 
   public drop(event: CdkDragDrop<any>) {
-    console.log('Transfer Service Has Triggered...');
-    /**
-     * {
-     * current: "ID@Tue Mar 01 2022",
-       previous: "ID@6220d2c709fdbd55b9009c56@2022-03-01T14:36:37.322Z"
-      }
-     */
-
-    const scheduleId: string = event.previousContainer.id.split('@')[1]; // new Date(event.container.id.split('@')[2]);
+    const scheduleId: string = event.item.data?._id || event.previousContainer.id.split('@')[1];
     const dateTobePushed: Date = new Date(event.container.id.split('@')[1]);
 
     this.weekScheduleService
@@ -31,7 +23,7 @@ export class DragSropShareService implements OnInit {
         this.snackBar.open(
           `Schedule has been updated to ${dateTobePushed.toDateString()}`,
           'Done',
-          { duration: 3000, panelClass: ['bg-indigo-700', 'text-white'] }
+          { duration: 3000, panelClass: ['bg-[#5167F4]', 'text-white'] }
         );
       });
   }

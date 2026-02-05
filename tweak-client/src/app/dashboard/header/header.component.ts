@@ -16,7 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
         fxLayout.gt-lg="space-around center"
         fxLayout="start center"
         fxLayoutGap="20px"
-        class="m-auto md:text-4xl text-3xl font-bold"
+        class="m-auto text-[36px] font-bold"
       >
         <div fxLayout="start center" fxLayoutGap="20px">
           <button
@@ -107,7 +107,7 @@ export class HeaderComponent implements OnInit {
 
       this.snackbar.open(message, 'Done', {
         duration: 3000,
-        panelClass: ['bg-indigo-700', 'text-white'],
+        panelClass: ['bg-[#5167F4]', 'text-white'],
       });
     });
   }
