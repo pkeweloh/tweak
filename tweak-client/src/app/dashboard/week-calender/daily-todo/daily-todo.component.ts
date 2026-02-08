@@ -2,7 +2,6 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.service';
 import { ColorUtils } from 'src/app/shared/utils/colors.utils';
 import { Schedule } from 'src/app/shared/utils/types.utils';
@@ -12,84 +11,73 @@ import { DialoagboxComponent } from './dialoagbox/dialoagbox.component';
 @Component({
   selector: 'app-daily-todo',
   template: `
-    <div class="flex flex-col">
+    <div class="flex flex-col h-full">
       <div
         cdkDropList
         [cdkDropListData]="works"
         [cdkDropListConnectedTo]="generatedIds"
         [id]="getUniqueIdFromDate()"
         (cdkDropListDropped)="onDropped($event)"
-        class="min-h-0"
+        class="drop-list-container flex-grow relative"
+        [style.--min-rows]="maxRows"
       >
         <div
-          *ngFor="let slot of slots; let idx = index"
-          class="flex-col w-full flex justify-start border-b h-[45px]"
-          [ngClass]="{
-            'hover:border-[#5167F466]': works[idx] || idx === works.length,
-            'cursor-pointer': works[idx],
-            'cursor-text': idx === works.length
-          }"
+          *ngFor="let work of works; let idx = index; trackBy: trackById"
+          cdkDrag
+          [cdkDragData]="work"
+          class="schedule-div w-full flex items-center px-1 cursor-grab active:cursor-grabbing relative h-[45px] hover:border-[#5167F4] border-b border-transparent transition-colors duration-100 pr-7"
+          [class.opacity-0]="draggedIndex === idx"
+          (cdkDragStarted)="onDragStart(idx)"
+          (cdkDragEnded)="onDragEnd()"
+          (click)="launchDialog($event, editForms[idx])"
         >
-          <div
-            *ngIf="works[idx] as work"
-            cdkDrag
-            [cdkDragData]="work"
-            class="schedule-div h-full flex items-center px-1 cursor-pointer"
-            fxLayout="row"
-            fxLayoutAlign="space-between center"
-            (click)="launchDialog($event, editForms[idx])"
-          >
-            <div class="flex-1 truncate">
-              <div
-                class="outline-none cursor-grab border-none rounded-xl truncate inline px-1.5 w-full focus:bg-gray-50 focus:z-50"
-[ngClass]="getColor(work.colorCode)"
-  [class.opacity-30]="work.finished"
-  [class.line-through]="work.finished"
-              >
-                {{ work.todo }}
+          <ng-template cdkDragPreview [matchSize]="true">
+            <div class="drag-preview-content flex items-center">
+              <div class="flex-1 min-w-0 flex items-center">
+                <div
+                  class="outline-none border-none rounded-xl truncate inline-block px-1.5 max-w-full"
+                  [ngClass]="getColor(work.colorCode)"
+                  [class.opacity-30]="work.finished"
+                  [class.line-through]="work.finished"
+                >
+                  {{ work.todo }}
+                </div>
               </div>
             </div>
-            <div class="display-on-parent-hover hidden ml-2">
-              <mat-checkbox
-                (click)="$event.stopPropagation()"
-                (change)="onCheck($event.checked, editForms[idx])"
-                [checked]="work.finished"
-              ></mat-checkbox>
+          </ng-template>
+
+          <div *cdkDragPlaceholder class="drag-placeholder"></div>
+
+          <div class="flex-1 min-w-0 flex items-center">
+            <div
+              class="outline-none border-none rounded-xl truncate inline-block px-1.5 max-w-full focus:bg-gray-50 focus:z-50"
+              [ngClass]="getColor(work.colorCode)"
+              [class.opacity-30]="work.finished"
+              [class.line-through]="work.finished"
+            >
+              {{ work.todo }}
             </div>
           </div>
-
-          <!-- Empty Slot Placeholder / Add Form -->
-          <div
-            *ngIf="!works[idx]"
-            class="h-full w-full flex items-center text-gray-300 italic text-sm"
-          >
-            <app-add-form
-              *ngIf="idx === works.length"
-              [date]="date"
-              class="w-full h-full"
-            ></app-add-form>
+          
+          <div class="display-on-parent-hover hidden absolute right-1 top-1/2 -translate-y-1/2">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="onCheck($event.checked, editForms[idx])"
+              [checked]="work.finished"
+            ></mat-checkbox>
           </div>
+        </div>
+
+        <div class="h-[45px] max-h-[45px] overflow-hidden w-full flex items-center text-gray-300 italic text-sm px-1 hover:border-[#5167F4] border-b border-transparent">
+          <app-add-form
+            [date]="date"
+            class="w-full h-full"
+          ></app-add-form>
         </div>
       </div>
     </div>
   `,
-  styles: [
-    `
-      .schedule-div:hover .display-on-parent-hover {
-        visibility: visible;
-        display: block;
-      }
-      .bg-green-420 {
-        background-color: #22ffa1;
-      }
-      .bg-yellow-420 {
-        background-color: #fdef5d;
-      }
-      .bg-blue-420 {
-        background-color: #a3b1ff;
-      }
-    `,
-  ],
+  styleUrls: [],
 })
 export class DailyTodoComponent implements OnInit, OnDestroy {
   @Input() date!: Date;
@@ -98,14 +86,13 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
   @Input() maxRows: number = 10;
 
   works: Array<Schedule> = [];
-  slots: Array<number> = [];
   editForms: Array<FormGroup> = [];
-  bgColor: string = 'bg-transparent';
+  draggedIndex: number = -1;
+  isDragging: boolean = false;
 
   constructor(
     private readonly weeklyScheduleService: WeekSchedulerService,
     private dialog: MatDialog,
-    private snackbar: MatSnackBar,
     private dragDropService: DragSropShareService
   ) { }
 
@@ -116,25 +103,13 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.weeklyScheduleService.weekSchedules$.subscribe((data) => {
       const d = data[this.date.toDateString()];
-      this.works = d ? [...d] : [];
+      this.works = d ? [...d].sort((a, b) => this.sortTasks(a, b)) : [];
 
       this.editForms = [];
       this.works.forEach((work) =>
         this.editForms.push(this.createNewForm({ ...work }))
       );
-
-      this.generateSlots();
     });
-  }
-
-  ngOnChanges(): void {
-    this.generateSlots();
-  }
-
-  private generateSlots() {
-    this.slots = Array(this.maxRows)
-      .fill(0)
-      .map((x, i) => i);
   }
 
   ngOnDestroy(): void { }
@@ -149,6 +124,7 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
       finished: new FormControl('', [Validators.requiredTrue]),
       username: new FormControl('', [Validators.requiredTrue]),
       createdAt: new FormControl('', [Validators.requiredTrue]),
+      order: new FormControl('', [Validators.requiredTrue]),
     });
 
     editForm.setValue({ ...work });
@@ -157,14 +133,12 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
 
   onEdited(form: FormGroup) {
     this.weeklyScheduleService.updateSchedule({ ...form.value }).subscribe(() => {
-      this.snackbar.open(`Schedule has been updated`, 'Done', {
-        duration: 3000,
-        panelClass: ['bg-[#5167F4]', 'text-white'],
-      });
     });
   }
 
   launchDialog(_: MouseEvent, form: FormGroup) {
+    if (this.isDragging) return;
+
     const previousState = { ...form.value };
     const dialogRef = this.dialog.open(DialoagboxComponent, {
       width: '600px',
@@ -180,13 +154,39 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
     });
   }
 
+  onDragStart(index: number) {
+    this.draggedIndex = index;
+    this.isDragging = true;
+    document.body.style.cursor = 'grabbing';
+  }
+
+  onDragEnd() {
+    this.draggedIndex = -1;
+    document.body.style.cursor = '';
+    setTimeout(() => {
+      this.isDragging = false;
+    }, 50);
+  }
+
   getColor(colorCode: string) {
     return ColorUtils.COLORS[+colorCode];
   }
 
   onCheck(state: boolean, form: FormGroup) {
     form.setValue({ ...form.value, finished: state });
+    const work = this.works.find((w) => w._id === form.value._id);
+    if (work) {
+      work.finished = state;
+      this.works.sort((a, b) => this.sortTasks(a, b));
+    }
     this.onEdited(form);
+  }
+
+  sortTasks(a: Schedule, b: Schedule): number {
+    if (a.finished !== b.finished) {
+      return a.finished ? 1 : -1;
+    }
+    return (a.order || 0) - (b.order || 0);
   }
 
   onDropped(event: CdkDragDrop<Array<Schedule>>) {
@@ -195,5 +195,9 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
 
   getUniqueIdFromDate() {
     return `ID@${this.date.toDateString()}`;
+  }
+
+  trackById(index: number, item: Schedule) {
+    return item._id;
   }
 }

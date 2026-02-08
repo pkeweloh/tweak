@@ -42,6 +42,12 @@ export class Schedule {
     default: () => Date.now(),
   })
   createdAt: Date;
+
+  @Prop({
+    type: SchemaTypes.Number,
+    default: 0,
+  })
+  order: number;
 }
 
 export type ScheduleDocument = User & Document;

@@ -9,7 +9,7 @@ import { DragSropShareService } from './drag-share.service';
 @Component({
   selector: 'app-week-calender',
   template: `
-    <div class="my-3 p-2 overflow-x-auto">
+    <div class="my-3 p-2 overflow-x-auto overflow-y-hidden">
       <div class="grid-6-col" cdkDropListGroup>
         <!-- Weekdays (Mon-Fri) -->
         <div
@@ -40,55 +40,60 @@ import { DragSropShareService } from './drag-share.service';
         </div>
 
         <!-- Weekend (Sat & Sun) -->
-        <div>
+        <div class="flex flex-col h-full gap-[40px]">
           <!-- Saturday -->
           <ng-container *ngIf="weekDays[5] as date">
-            <div
-              [class]="
-                'flex flex-row items-baseline border-b-2 py-2 px-1' +
-                setTodaysColor(date)
-              "
-              style="letter-spacing: -0.5px;"
-            >
-              <div class="font-bold text-[21px]">
-                {{ date | date: 'd MMM' | lowercase }}
+            <div class="flex-none overflow-hidden">
+              <div
+                [class]="
+                  'flex flex-row items-baseline border-b-2 py-2 px-1' +
+                  setTodaysColor(date)
+                "
+                style="letter-spacing: -0.5px;"
+              >
+                <div class="font-bold text-[21px]">
+                  {{ date | date: 'd MMM' | lowercase }}
+                </div>
+                <div class="flex-1"></div>
+                <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
+                  {{ date | date: 'EE' | lowercase }}
+                </div>
               </div>
-              <div class="flex-1"></div>
-              <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
-                {{ date | date: 'EE' | lowercase }}
-              </div>
+              <app-daily-todo
+                [date]="date"
+                [generatedIds]="generatedIds"
+                [connectedIndex]="5"
+                [maxRows]="satMaxRows"
+              ></app-daily-todo>
             </div>
-            <app-daily-todo
-              [date]="date"
-              [generatedIds]="generatedIds"
-              [connectedIndex]="5"
-              [maxRows]="satMaxRows"
-            ></app-daily-todo>
           </ng-container>
 
           <!-- Sunday -->
           <ng-container *ngIf="weekDays[6] as date">
-            <div
-              [class]="
-                'flex flex-row items-baseline border-b-2 py-2 px-1' +
-                setTodaysColor(date)
-              "
-              style="letter-spacing: -0.5px;"
-            >
-              <div class="font-bold text-[21px]">
-                {{ date | date: 'd MMM' | lowercase }}
+            <div class="flex-1 flex flex-col h-full">
+              <div
+                [class]="
+                  'flex flex-row items-baseline border-b-2 py-2 px-1' +
+                  setTodaysColor(date)
+                "
+                style="letter-spacing: -0.5px;"
+              >
+                <div class="font-bold text-[21px]">
+                  {{ date | date: 'd MMM' | lowercase }}
+                </div>
+                <div class="flex-1"></div>
+                <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
+                  {{ date | date: 'EE' | lowercase }}
+                </div>
               </div>
-              <div class="flex-1"></div>
-              <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
-                {{ date | date: 'EE' | lowercase }}
-              </div>
+              <app-daily-todo
+                class="flex-grow"
+                [date]="date"
+                [generatedIds]="generatedIds"
+                [connectedIndex]="6"
+                [maxRows]="sunMaxRows"
+              ></app-daily-todo>
             </div>
-            <app-daily-todo
-              [date]="date"
-              [generatedIds]="generatedIds"
-              [connectedIndex]="6"
-              [maxRows]="sunMaxRows"
-            ></app-daily-todo>
           </ng-container>
         </div>
       </div>
@@ -126,30 +131,9 @@ export class WeekCalenderComponent implements OnInit {
     this.registerSubscriptions(() =>
       this.weekSchedulerService.weekSchedules$.subscribe((data) => {
         if (!this.weekDays.length) return;
-
-        const counts = this.weekDays.map(d => (data[d.toDateString()] || []).length);
-        const countsPlusInput = counts.map(c => c + 1);
-
-        const wdCount = Math.max(10, ...countsPlusInput.slice(0, 5));
-        const satCount = Math.max(4, countsPlusInput[5]);
-        const sunCount = Math.max(5, countsPlusInput[6]);
-
-        // Squeeze Sunday to 4 if Saturday needs space and Sunday can spare it
-        let effectiveSunCount = sunCount;
-        if (satCount > 4 && countsPlusInput[6] <= 4) {
-          effectiveSunCount = 4;
-        }
-
-        // Total Slots calculation:
-        // Sat side = 1 (Sat Head) + satCount + 1 (Sun Head) + effectiveSunCount
-        const satSideTotal = 1 + satCount + 1 + effectiveSunCount;
-        const wdSideTotal = 1 + wdCount;
-
-        const totalHeight = Math.max(wdSideTotal, satSideTotal);
-
-        this.wdMaxRows = totalHeight - 1;
-        this.satMaxRows = satCount;
-        this.sunMaxRows = totalHeight - 1 - this.satMaxRows - 1; // total - SatHead - satCount - SunHead
+        this.wdMaxRows = 10;
+        this.satMaxRows = 4;
+        this.sunMaxRows = 4;
       })
     );
 

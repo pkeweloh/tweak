@@ -17,7 +17,18 @@ export class ScheduleService {
     createScheduleDto: CreateScheduleDto,
   ): Promise<{ data: string } | Error> {
     try {
-      const scheduleDoc = new this.scheduleModel(createScheduleDto);
+      const dateStr = new Date(createScheduleDto.date).toDateString();
+      const existingSchedules = await this.scheduleModel.find({
+        username: createScheduleDto.username,
+        date: dateStr,
+      });
+
+      const order = existingSchedules.length;
+
+      const scheduleDoc = new this.scheduleModel({
+        ...createScheduleDto,
+        order,
+      });
       await scheduleDoc.save();
       return { data: 'schedule created!' };
     } catch (error) {
@@ -46,7 +57,7 @@ export class ScheduleService {
         username: user.username,
         date: { $gte: mfrom, $lte: mto },
       })
-      .sort([['date', 'desc']]);
+      .sort([['date', 'desc'], ['order', 'asc']]);
 
     return { data: await this.generateScheduleRecordByDates(schedules) };
   }
@@ -60,10 +71,41 @@ export class ScheduleService {
     return { data: `schedule ${id} has been updated` };
   }
 
-  async updateDateById(id: string, newDate: Date) {
-    await this.scheduleModel.findByIdAndUpdate(id, { date: newDate });
+  async updateDateById(id: string, newDate: Date, order?: number) {
+    const movedSchedule = await this.scheduleModel.findById(id);
+    if (!movedSchedule) {
+      throw new Error('Schedule not found');
+    }
+
+    const dateStr = new Date(newDate).toDateString();
+
+    const siblings = await this.scheduleModel
+      .find({
+        username: movedSchedule.username,
+        date: dateStr,
+        _id: { $ne: id },
+      })
+      .sort({ order: 1 });
+
+    let targetIndex = order !== undefined ? order : siblings.length;
+    if (targetIndex < 0) targetIndex = 0;
+    if (targetIndex > siblings.length) targetIndex = siblings.length;
+
+    siblings.splice(targetIndex, 0, movedSchedule);
+
+    const bulkOps = siblings.map((schedule, index) => ({
+      updateOne: {
+        filter: { _id: schedule._id },
+        update: { $set: { date: dateStr, order: index } },
+      },
+    }));
+
+    if (bulkOps.length > 0) {
+      await this.scheduleModel.bulkWrite(bulkOps);
+    }
+
     return {
-      data: `schedule ${id} has been updated to ${newDate}`,
+      data: `schedule ${id} has been updated to ${dateStr} at order ${targetIndex}`,
     };
   }
 

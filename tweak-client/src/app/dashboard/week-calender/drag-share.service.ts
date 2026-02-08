@@ -1,6 +1,5 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Injectable, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.service';
 
 @Injectable({
@@ -8,23 +7,42 @@ import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.ser
 })
 export class DragSropShareService implements OnInit {
   constructor(
-    private weekScheduleService: WeekSchedulerService,
-    private snackBar: MatSnackBar
+    private weekScheduleService: WeekSchedulerService
   ) { }
   ngOnInit(): void { }
 
   public drop(event: CdkDragDrop<any>) {
-    const scheduleId: string = event.item.data?._id || event.previousContainer.id.split('@')[1];
+    if (event.previousContainer === event.container && event.previousIndex === event.currentIndex) {
+      return;
+    }
+
+    const scheduleId: string = event.item.data?._id;
     const dateTobePushed: Date = new Date(event.container.id.split('@')[1]);
 
+    // Optimistic Update: Move the item visually immediately
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
+
+    const newOrder = event.currentIndex;
+
+    const targetList: any[] = event.container.data || [];
+    targetList.forEach((item, index) => {
+      item.order = index;
+      if (item._id === scheduleId) {
+        item.date = dateTobePushed;
+      }
+    });
+
     this.weekScheduleService
-      .updateScheduleDatebyId(scheduleId, dateTobePushed)
-      .subscribe((response) => {
-        this.snackBar.open(
-          `Schedule has been updated to ${dateTobePushed.toDateString()}`,
-          'Done',
-          { duration: 3000, panelClass: ['bg-[#5167F4]', 'text-white'] }
-        );
-      });
+      .updateScheduleDatebyId(scheduleId, dateTobePushed, newOrder)
+      .subscribe(() => { });
   }
 }

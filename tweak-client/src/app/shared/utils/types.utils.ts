@@ -15,5 +15,6 @@ export interface Schedule {
   date: Date;
   todo: string;
   createdAt: Date;
+  order: number;
   __v: number;
 }

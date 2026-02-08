@@ -80,7 +80,6 @@ import { Schedule } from 'src/app/shared/utils/types.utils';
         <button
           mat-button
           [mat-dialog-close]="onSave()"
-          cdkFocusInitial
           color="primary"
         >
           Save
@@ -106,6 +105,7 @@ export class DialoagboxComponent implements OnInit {
     finished: new FormControl(''),
     username: new FormControl(''),
     createdAt: new FormControl(''),
+    order: new FormControl(''),
   });
 
   constructor(
