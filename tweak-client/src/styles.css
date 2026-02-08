@@ -1,5 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
-
 /* SuisseIntl Font - Book (Regular) Weight */
 @font-face {
   font-family: "SuisseIntl";
@@ -24,10 +22,7 @@ body {
 }
 
 :root {
-  /* Font family - Using SuisseIntl from tweek.so */
   --tweek-font-family: "SuisseIntl";
-
-  /* Tweek.so color palette */
   --tweek-bg-primary: #ffffff;
   --tweek-text-primary: #000000;
   --tweek-text-secondary: #666666;
@@ -43,4 +38,97 @@ body {
   color: var(--tweek-text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Component Styles --- */
+
+.drop-list-container {
+  min-height: calc(45px * var(--min-rows, 10));
+  background-color: transparent;
+  background-image: linear-gradient(to bottom, transparent 44px, #e5e7eb 44px);
+  background-size: 100% 45px;
+}
+
+.schedule-div:hover .display-on-parent-hover {
+  display: block;
+}
+
+.drag-placeholder {
+  opacity: 0;
+  height: 45px;
+}
+
+.drag-preview-content {
+  height: 45px;
+  padding: 0 4px;
+  background-color: rgba(81, 103, 244, 0.15);
+  border-radius: 6px;
+  font-size: 14px;
+  color: #111827;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 200px !important;
+  display: flex;
+  cursor: grabbing !important;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drop-list-container.cdk-drop-list-dragging .schedule-div:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drop-list-container.cdk-drop-list-dragging .schedule-div {
+  cursor: grabbing !important;
+}
+
+/* Color Tasks */
+
+.bg-green-420 {
+  background-color: #22ffa1;
+}
+
+.bg-yellow-420 {
+  background-color: #fdef5d;
+}
+
+.bg-blue-420 {
+  background-color: #a3b1ff;
+}
+
+.bg-red-700 {
+  background-color: #b91c1c;
+}
+
+.bg-fuchsia-500 {
+  background-color: #d946ef;
+}
+
+.bg-amber-400 {
+  background-color: #fbbf24;
+}
+
+.bg-indigo-500 {
+  background-color: #6366f1;
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
+.bg-black {
+  background-color: #000000;
 }

@@ -134,11 +134,14 @@ export class WeekSchedulerService implements OnDestroy {
       );
   }
 
-  updateScheduleDatebyId(scheduleId: string, dateTobePushed: Date) {
+  updateScheduleDatebyId(scheduleId: string, dateTobePushed: Date, order?: number) {
+    const body: any = { newDate: this.toServerDate(new Date(dateTobePushed)) };
+    if (order !== undefined) body.order = order;
+
     return this.http
       .patch(
         `/api/schedules/update-date`,
-        { newDate: this.toServerDate(new Date(dateTobePushed)) },
+        body,
         {
           params: { id: scheduleId },
         }
@@ -166,10 +169,6 @@ export class WeekSchedulerService implements OnDestroy {
     };
   }
 
-  /**
-   * Helper to format Date to YYYY-MM-DD using Local Time
-   * This avoids UTC shifting when sending to backend.
-   */
   private toServerDate(date: Date): string {
     const d = new Date(date);
     const year = d.getFullYear();
