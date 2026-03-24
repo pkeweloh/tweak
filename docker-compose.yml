@@ -3,28 +3,31 @@ version: '3.8'
 services:
   backend:
     container_name: tweak-backend
-    restart: always
+    image: tweak-backend:dev
     build:
       context: .
       dockerfile: tweak-backend/Dockerfile
+    restart: always
     ports:
       - "1337:1337"
     networks:
       - tweak-net
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     env_file:
       - .env
     volumes:
       - ./tweak-backend:/app
-      - /app/node_modules
+      - backend_node_modules:/app/node_modules
 
   frontend:
     container_name: tweak-frontend
-    restart: always
+    image: tweak-frontend:dev
     build:
       context: .
       dockerfile: tweak-client/Dockerfile
+    restart: always
     ports:
       - "4200:4200"
     networks:
@@ -35,12 +38,12 @@ services:
       - .env
     volumes:
       - ./tweak-client:/app
-      - /app/node_modules
+      - frontend_node_modules:/app/node_modules
 
   mongodb:
-    restart: always
-    image: mongo:5.0
     container_name: mongodb
+    image: mongo:5.0
+    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
@@ -50,11 +53,19 @@ services:
       - mongodb_data:/data/db
     networks:
       - tweak-net
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mongodb_data:
+  backend_node_modules:
+  frontend_node_modules:
 
 
 networks:
   tweak-net:
     driver: bridge
+    name: tweak-net
