@@ -58,9 +58,9 @@ export class ScheduleController {
   @Patch('update-date')
   updateDateById(
     @Query('id') id: string,
-    @Body() payload: { newDate: Date; order?: number },
+    @Body() payload: { newDate: Date; order?: number; isSomeday?: number | null },
   ) {
-    return this.scheduleService.updateDateById(id, payload.newDate, payload.order);
+    return this.scheduleService.updateDateById(id, payload.newDate, payload.order, payload.isSomeday);
   }
 
   @Delete('delete')

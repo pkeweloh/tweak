@@ -17,4 +17,5 @@ export interface Schedule {
   createdAt: Date;
   order: number;
   __v: number;
+  isSomeday?: number | null;
 }

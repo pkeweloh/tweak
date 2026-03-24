@@ -106,6 +106,7 @@ export class DialoagboxComponent implements OnInit {
     username: new FormControl(''),
     createdAt: new FormControl(''),
     order: new FormControl(''),
+    isSomeday: new FormControl(null),
   });
 
   constructor(
@@ -115,7 +116,7 @@ export class DialoagboxComponent implements OnInit {
     private snackbar: MatSnackBar
   ) {
     this.scheduleData = dialogData.payload;
-    this.formGroup.setValue({ ...this.scheduleData });
+    this.formGroup.patchValue({ ...this.scheduleData });
   }
 
   ngOnInit(): void {

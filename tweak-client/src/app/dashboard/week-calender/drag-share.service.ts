@@ -17,7 +17,11 @@ export class DragSropShareService implements OnInit {
     }
 
     const scheduleId: string = event.item.data?._id;
-    const dateTobePushed: Date = new Date(event.container.id.split('@')[1]);
+    const originalDate = event.item.data?.date;
+    const rawDateStr = event.container.id.split('@')[1];
+    const isSomedayList = rawDateStr.startsWith('Someday');
+    const isSomedayValue = isSomedayList ? parseInt(rawDateStr.split('-')[1], 10) : null;
+    const dateTobePushed: Date = isSomedayList ? (originalDate || new Date()) : new Date(rawDateStr);
 
     // Optimistic Update: Move the item visually immediately
     if (event.previousContainer === event.container) {
@@ -38,11 +42,12 @@ export class DragSropShareService implements OnInit {
       item.order = index;
       if (item._id === scheduleId) {
         item.date = dateTobePushed;
+        item.isSomeday = isSomedayValue;
       }
     });
 
     this.weekScheduleService
-      .updateScheduleDatebyId(scheduleId, dateTobePushed, newOrder)
+      .updateScheduleDatebyId(scheduleId, dateTobePushed, newOrder, isSomedayValue)
       .subscribe(() => { });
   }
 }

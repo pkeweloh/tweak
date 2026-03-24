@@ -18,7 +18,7 @@ import { DragSropShareService } from './drag-share.service';
         >
           <div
             [class]="
-              'flex flex-row items-baseline border-b-2 py-2 px-1' +
+              'flex flex-row items-baseline border-b-2 h-[45px] px-1 box-border' +
               setTodaysColor(date)
             "
             style="letter-spacing: -0.5px;"
@@ -40,13 +40,13 @@ import { DragSropShareService } from './drag-share.service';
         </div>
 
         <!-- Weekend (Sat & Sun) -->
-        <div class="flex flex-col h-full gap-[40px]">
+        <div class="flex flex-col h-full gap-[45px]">
           <!-- Saturday -->
           <ng-container *ngIf="weekDays[5] as date">
             <div class="flex-none overflow-hidden">
               <div
                 [class]="
-                  'flex flex-row items-baseline border-b-2 py-2 px-1' +
+                  'flex flex-row items-baseline border-b-2 h-[45px] px-1 box-border' +
                   setTodaysColor(date)
                 "
                 style="letter-spacing: -0.5px;"
@@ -73,7 +73,7 @@ import { DragSropShareService } from './drag-share.service';
             <div class="flex-1 flex flex-col h-full">
               <div
                 [class]="
-                  'flex flex-row items-baseline border-b-2 py-2 px-1' +
+                  'flex flex-row items-baseline border-b-2 h-[45px] px-1 box-border' +
                   setTodaysColor(date)
                 "
                 style="letter-spacing: -0.5px;"
@@ -97,18 +97,40 @@ import { DragSropShareService } from './drag-share.service';
           </ng-container>
         </div>
       </div>
+
+      <!-- Someday Section Separator Block -->
+      <div class="w-full bg-white relative z-10 pt-8 pb-4 mt-4 px-1">
+        <span class="font-bold text-black opacity-20 tracking-wide" style="font-family: 'SuisseIntl'; font-size: 20px;">Someday</span>
+      </div>
+      
+      <div class="grid-6-col" cdkDropListGroup>
+        <!-- Someday lists -->
+        <ng-container *ngFor="let somedayId of somedayLists; let i = index">
+          <div class="col-span-2 flex flex-col border-t border-[#e5e7eb]">
+            <app-daily-todo
+              class="flex-1"
+              [date]="date"
+              [listId]="somedayId"
+              [generatedIds]="generatedIds"
+              [connectedIndex]="10 + i"
+              [maxRows]="10"
+            ></app-daily-todo>
+          </div>
+        </ng-container>
+      </div>
     </div>
   `,
   styleUrls: ['./week-calender.component.css'],
 })
 export class WeekCalenderComponent implements OnInit {
   weekDays: Date[] = [];
+  somedayLists: string[] = ['Someday-0', 'Someday-1', 'Someday-2'];
   subscriptions: Array<Subscription> = [];
   date: Date = new Date();
   generatedIds: Array<string> = [];
   wdMaxRows: number = 10;
   satMaxRows: number = 4;
-  sunMaxRows: number = 5;
+  sunMaxRows: number = 4;
 
   constructor(
     private readonly weekSchedulerService: WeekSchedulerService,
@@ -125,6 +147,7 @@ export class WeekCalenderComponent implements OnInit {
         this.weekDays.forEach((week) => {
           this.generatedIds.push(this.getUniqueId(week));
         });
+        this.somedayLists.forEach(list => this.generatedIds.push(`ID@${list}`));
       })
     );
 

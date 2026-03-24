@@ -48,6 +48,12 @@ export class Schedule {
     default: 0,
   })
   order: number;
+
+  @Prop({
+    type: SchemaTypes.Number,
+    default: null,
+  })
+  isSomeday: number;
 }
 
 export type ScheduleDocument = User & Document;

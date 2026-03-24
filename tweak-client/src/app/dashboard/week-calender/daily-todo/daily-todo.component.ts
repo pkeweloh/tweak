@@ -71,6 +71,7 @@ import { DialoagboxComponent } from './dialoagbox/dialoagbox.component';
         <div class="h-[45px] max-h-[45px] overflow-hidden w-full flex items-center text-gray-300 italic text-sm px-1 hover:border-[#5167F4] border-b border-transparent">
           <app-add-form
             [date]="date"
+            [isSomeday]="isSomedayValue"
             class="w-full h-full"
           ></app-add-form>
         </div>
@@ -81,6 +82,7 @@ import { DialoagboxComponent } from './dialoagbox/dialoagbox.component';
 })
 export class DailyTodoComponent implements OnInit, OnDestroy {
   @Input() date!: Date;
+  @Input() listId?: string;
   @Input() generatedIds!: Array<string>;
   @Input() connectedIndex!: number;
   @Input() maxRows: number = 10;
@@ -89,6 +91,17 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
   editForms: Array<FormGroup> = [];
   draggedIndex: number = -1;
   isDragging: boolean = false;
+
+  get isSomedayValue(): number | null {
+    if (this.listId && this.listId.startsWith('Someday')) {
+      return parseInt(this.listId.split('-')[1], 10);
+    }
+    return null;
+  }
+
+  get isSomedayList(): boolean {
+    return !!(this.listId && this.listId.startsWith('Someday'));
+  }
 
   constructor(
     private readonly weeklyScheduleService: WeekSchedulerService,
@@ -102,7 +115,8 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.weeklyScheduleService.weekSchedules$.subscribe((data) => {
-      const d = data[this.date.toDateString()];
+      const key = this.listId || (this.date as Date).toDateString();
+      const d = data[key];
       this.works = d ? [...d].sort((a, b) => this.sortTasks(a, b)) : [];
 
       this.editForms = [];
@@ -125,9 +139,10 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
       username: new FormControl('', [Validators.requiredTrue]),
       createdAt: new FormControl('', [Validators.requiredTrue]),
       order: new FormControl('', [Validators.requiredTrue]),
+      isSomeday: new FormControl(null),
     });
 
-    editForm.setValue({ ...work });
+    editForm.patchValue({ ...work });
     return editForm;
   }
 
@@ -147,7 +162,7 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (!result) return;
-      form.setValue({ ...result });
+      form.patchValue({ ...result });
       if (JSON.stringify(previousState) === JSON.stringify({ ...form.value }))
         return;
       this.onEdited(form);
@@ -173,7 +188,7 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
   }
 
   onCheck(state: boolean, form: FormGroup) {
-    form.setValue({ ...form.value, finished: state });
+    form.patchValue({ ...form.value, finished: state });
     const work = this.works.find((w) => w._id === form.value._id);
     if (work) {
       work.finished = state;
@@ -194,7 +209,7 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
   }
 
   getUniqueIdFromDate() {
-    return `ID@${this.date.toDateString()}`;
+    return `ID@${this.listId || (this.date as Date).toDateString()}`;
   }
 
   trackById(index: number, item: Schedule) {

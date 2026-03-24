@@ -134,9 +134,10 @@ export class WeekSchedulerService implements OnDestroy {
       );
   }
 
-  updateScheduleDatebyId(scheduleId: string, dateTobePushed: Date, order?: number) {
-    const body: any = { newDate: this.toServerDate(new Date(dateTobePushed)) };
+  updateScheduleDatebyId(scheduleId: string, dateTobePushed: Date, order?: number, isSomeday?: number | null) {
+    const body: any = { newDate: this.toServerDate(new Date(dateTobePushed || new Date())) };
     if (order !== undefined) body.order = order;
+    if (isSomeday !== undefined) body.isSomeday = isSomeday;
 
     return this.http
       .patch(

@@ -43,6 +43,7 @@ import { Schedule } from 'src/app/shared/utils/types.utils';
 })
 export class AddFormComponent implements OnInit {
   @Input() date!: Date;
+  @Input() isSomeday?: number | null;
   constructor(private readonly weeklyScheduleService: WeekSchedulerService, private snackbar: MatSnackBar) { }
 
   isSubmitting = false;
@@ -65,7 +66,8 @@ export class AddFormComponent implements OnInit {
 
     const formData: Partial<Schedule> = {
       todo: taskText,
-      date: this.date,
+      date: this.date || new Date(),
+      isSomeday: this.isSomeday,
       colorCode: '0',
       finished: false,
     };

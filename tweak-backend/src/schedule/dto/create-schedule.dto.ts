@@ -14,4 +14,5 @@ export class CreateScheduleDto {
   colorCode: string;
   finished: boolean;
   username: string;
+  isSomeday?: number | null;
 }

@@ -27,6 +27,7 @@ export class ScheduleService {
 
       const scheduleDoc = new this.scheduleModel({
         ...createScheduleDto,
+        date: dateStr,
         order,
       });
       await scheduleDoc.save();
@@ -55,7 +56,10 @@ export class ScheduleService {
     const schedules = await this.scheduleModel
       .where({
         username: user.username,
-        date: { $gte: mfrom, $lte: mto },
+        $or: [
+          { date: { $gte: mfrom, $lte: mto }, isSomeday: null },
+          { isSomeday: { $ne: null } }
+        ]
       })
       .sort([['date', 'desc'], ['order', 'asc']]);
 
@@ -71,20 +75,28 @@ export class ScheduleService {
     return { data: `schedule ${id} has been updated` };
   }
 
-  async updateDateById(id: string, newDate: Date, order?: number) {
+  async updateDateById(id: string, newDate: Date, order?: number, isSomeday?: number | null) {
     const movedSchedule = await this.scheduleModel.findById(id);
     if (!movedSchedule) {
       throw new Error('Schedule not found');
     }
 
-    const dateStr = new Date(newDate).toDateString();
+    const dateStr = newDate ? new Date(newDate).toDateString() : (movedSchedule as any).date;
+
+    const queryInfo: any = {
+      username: movedSchedule.username,
+      _id: { $ne: id },
+    };
+    
+    if (isSomeday !== undefined && isSomeday !== null) {
+      queryInfo.isSomeday = isSomeday;
+    } else {
+      queryInfo.date = dateStr;
+      queryInfo.isSomeday = null;
+    }
 
     const siblings = await this.scheduleModel
-      .find({
-        username: movedSchedule.username,
-        date: dateStr,
-        _id: { $ne: id },
-      })
+      .find(queryInfo)
       .sort({ order: 1 });
 
     let targetIndex = order !== undefined ? order : siblings.length;
@@ -96,7 +108,7 @@ export class ScheduleService {
     const bulkOps = siblings.map((schedule, index) => ({
       updateOne: {
         filter: { _id: schedule._id },
-        update: { $set: { date: dateStr, order: index } },
+        update: { $set: { date: dateStr, order: index, isSomeday: isSomeday !== undefined ? isSomeday : null } },
       },
     }));
 
@@ -157,7 +169,9 @@ export class ScheduleService {
      */
     const data: Record<string, Array<Schedule>> = {};
     schedules.forEach((schedule: any) => {
-      const date = schedule.date.toDateString();
+      const date = schedule.isSomeday !== null && schedule.isSomeday !== undefined 
+        ? `Someday-${schedule.isSomeday}` 
+        : schedule.date.toDateString();
       if (date in data) {
         data[date].push(schedule);
       } else {

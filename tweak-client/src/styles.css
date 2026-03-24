@@ -132,3 +132,11 @@ body {
 .bg-black {
   background-color: #000000;
 }
+
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+
+.col-span-6 {
+  grid-column: span 6 / span 6;
+}
