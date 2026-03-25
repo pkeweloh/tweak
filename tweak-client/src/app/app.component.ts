@@ -1,10 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'tweak-client';
+
+  constructor(private translate: TranslateService) {
+    const savedLang = localStorage.getItem('lang') || 'en';
+    this.translate.use(savedLang);
+  }
+
+  ngOnInit(): void {}
 }

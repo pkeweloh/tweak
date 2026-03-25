@@ -1,0 +1,98 @@
+{
+  "LOGIN": {
+    "TITLE": "Tweak Planner",
+    "SUBTITLE": "Planea tu semana como solíamos hacerlo esos días👨🏻‍💻.",
+    "USERNAME": "Usuario",
+    "PASSWORD": "Contraseña",
+    "BTN_LOGIN": "Iniciar sesión",
+    "BTN_SIGNUP": "Registrarse",
+    "ALREADY_HAVE": "¿Ya tienes una cuenta?",
+    "DO_NOT_HAVE": "¿No tienes cuenta?",
+    "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
+    "RESET_PASSWORD": "Restablecer contraseña",
+    "USERNAME_REQUIRED_1": "¡El usuario es obligatorio!",
+    "USERNAME_REQUIRED_2": "El usuario es <strong>obligatorio</strong>",
+    "PASSWORD_REQUIRED_1": "¡La contraseña es obligatoria!",
+    "PASSWORD_REQUIRED_2": "La contraseña es <strong>obligatoria</strong>",
+    "APP_STATE_REINIT": "Estado de la aplicación reinicializado",
+    "YOU_ARE_LOGGED_IN": "Has iniciado sesión",
+    "SOMETHING_WENT_WRONG": "¡algo salió mal!"
+  },
+  "HEADER": {
+    "MOVE_UNFINISHED": "Mover Tareas Incompletas",
+    "LOGOUT": "Cerrar sesión",
+    "ROLLOVER_COMPLETE": "🚀 ¡Traspaso completado! Movimos {{count}} tareas a hoy.",
+    "NO_UNFINISHED": "✅ No hay tareas incompletas para mover."
+  },
+  "CALENDER": {
+    "PLAN_YOUR_DAY": "Planea tu Día 🙌",
+    "SOMEDAY": "Algún día",
+    "TODO_DESCRIPTION_LABEL": "Descripción de la tarea...",
+    "IS_PRIORITY": "¿Es Prioridad?",
+    "ADD_TODO": "Añadir Tarea",
+    "DELETE_BTN": "Eliminar",
+    "APPSTATE_REFRESHED": "Estado de la aplicación actualizado",
+    "NEW_SCHEDULE_CREATED": "¡Se ha creado una nueva tarea!",
+    "SCHEDULE_DELETED": "La tarea ha sido eliminada.",
+    "SCHEDULE_RESTORED": "La tarea ha sido restaurada.",
+    "TODO_LABEL": "Tu Tarea",
+    "DATE_LABEL": "Fecha:",
+    "ASSIGN_COLOR_LABEL": "Asignar Color:",
+    "DAYS": {
+      "SUNDAY": "Dom",
+      "MONDAY": "Lun",
+      "TUESDAY": "Mar",
+      "WEDNESDAY": "Mié",
+      "THURSDAY": "Jue",
+      "FRIDAY": "Vie",
+      "SATURDAY": "Sáb"
+    },
+    "DAYS_SHORT": {
+      "SUNDAY": "D",
+      "MONDAY": "L",
+      "TUESDAY": "M",
+      "WEDNESDAY": "X",
+      "THURSDAY": "J",
+      "FRIDAY": "V",
+      "SATURDAY": "S"
+    },
+    "MONTHS": {
+      "0": "Enero",
+      "1": "Febrero",
+      "2": "Marzo",
+      "3": "Abril",
+      "4": "Mayo",
+      "5": "Junio",
+      "6": "Julio",
+      "7": "Agosto",
+      "8": "Septiembre",
+      "9": "Octubre",
+      "10": "Noviembre",
+      "11": "Diciembre"
+    },
+    "MONTHS_SHORT": {
+      "0": "Ene",
+      "1": "Feb",
+      "2": "Mar",
+      "3": "Abr",
+      "4": "May",
+      "5": "Jun",
+      "6": "Jul",
+      "7": "Ago",
+      "8": "Sep",
+      "9": "Oct",
+      "10": "Nov",
+      "11": "Dic"
+    }
+  },
+  "COMMON": {
+    "DONE": "Hecho",
+    "CANCEL": "Cancelar",
+    "DELETE": "Eliminar",
+    "EDIT": "Editar",
+    "SAVE": "Guardar",
+    "YES": "Sí",
+    "NO": "No",
+    "UNDO": "Deshacer"
+  }
+}

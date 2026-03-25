@@ -1,6 +1,7 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { CalendarService } from 'src/app/shared/services/calendar.service';
 import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.service';
@@ -24,11 +25,11 @@ import { DragSropShareService } from './drag-share.service';
             style="letter-spacing: -0.5px;"
           >
             <div class="font-bold text-[21px]">
-              {{ date | date: 'd MMM' | lowercase }}
+              {{ date | date: 'd' }} {{ 'CALENDER.MONTHS_SHORT.' + date.getMonth() | translate }}
             </div>
             <div class="flex-1"></div>
             <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
-              {{ date | date: 'EE' | lowercase }}
+              {{ 'CALENDER.DAYS.' + (date | date: 'EEEE' | uppercase) | translate }}
             </div>
           </div>
           <app-daily-todo
@@ -52,11 +53,11 @@ import { DragSropShareService } from './drag-share.service';
                 style="letter-spacing: -0.5px;"
               >
                 <div class="font-bold text-[21px]">
-                  {{ date | date: 'd MMM' | lowercase }}
+                  {{ date | date: 'd' }} {{ 'CALENDER.MONTHS_SHORT.' + date.getMonth() | translate }}
                 </div>
                 <div class="flex-1"></div>
                 <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
-                  {{ date | date: 'EE' | lowercase }}
+                  {{ 'CALENDER.DAYS.' + (date | date: 'EEEE' | uppercase) | translate }}
                 </div>
               </div>
               <app-daily-todo
@@ -79,11 +80,11 @@ import { DragSropShareService } from './drag-share.service';
                 style="letter-spacing: -0.5px;"
               >
                 <div class="font-bold text-[21px]">
-                  {{ date | date: 'd MMM' | lowercase }}
+                  {{ date | date: 'd' }} {{ 'CALENDER.MONTHS_SHORT.' + date.getMonth() | translate }}
                 </div>
                 <div class="flex-1"></div>
                 <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
-                  {{ date | date: 'EE' | lowercase }}
+                  {{ 'CALENDER.DAYS.' + (date | date: 'EEEE' | uppercase) | translate }}
                 </div>
               </div>
               <app-daily-todo
@@ -100,7 +101,7 @@ import { DragSropShareService } from './drag-share.service';
 
       <!-- Someday Section Separator Block -->
       <div class="w-full bg-white relative z-10 pt-8 pb-4 mt-4 px-1">
-        <span class="font-bold text-black opacity-20 tracking-wide" style="font-family: 'SuisseIntl'; font-size: 20px;">Someday</span>
+        <span class="font-bold text-black opacity-20 tracking-wide" style="font-family: 'SuisseIntl'; font-size: 20px;">{{ 'CALENDER.SOMEDAY' | translate }}</span>
       </div>
       
       <div class="grid-6-col" cdkDropListGroup>
@@ -136,7 +137,8 @@ export class WeekCalenderComponent implements OnInit {
     private readonly weekSchedulerService: WeekSchedulerService,
     private calendarService: CalendarService,
     private snackbar: MatSnackBar,
-    private dragDropService: DragSropShareService
+    private dragDropService: DragSropShareService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -161,9 +163,11 @@ export class WeekCalenderComponent implements OnInit {
     );
 
     this.weekSchedulerService.refreshState();
-    this.snackbar.open('Appstate Refreshed', 'Done', {
-      duration: 3000,
-      panelClass: ['bg-[#5167F4]', 'text-white'],
+    this.translate.get('CALENDER.APPSTATE_REFRESHED').subscribe((res: string) => {
+      this.snackbar.open(res, this.translate.instant('COMMON.DONE'), {
+        duration: 3000,
+        panelClass: ['bg-[#5167F4]', 'text-white'],
+      });
     });
   }
 

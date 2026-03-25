@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
@@ -14,9 +15,9 @@ import { AuthService } from 'src/app/shared/services/auth.service';
   template: `
     <div class="m-20" fxLayout="column" fxLayoutAlign="start center">
       <div fxLayout="column" fxLayoutAlign="start center" class="my-6">
-        <h1 class="text-5xl font-bold my-2 text-black">Tweak Planner</h1>
+        <h1 class="text-5xl font-bold my-2 text-black">{{ 'LOGIN.TITLE' | translate }}</h1>
         <div class="body-font text-gray-800">
-          Plan your week what we were used to those days👨🏻‍💻.
+          {{ 'LOGIN.SUBTITLE' | translate }}
         </div>
       </div>
       <form
@@ -26,17 +27,17 @@ import { AuthService } from 'src/app/shared/services/auth.service';
         class="w-600"
       >
         <mat-form-field appearance="fill">
-          <mat-label> Username </mat-label>
+          <mat-label> {{ 'LOGIN.USERNAME' | translate }} </mat-label>
           <mat-error
             *ngIf="
               usernameField?.hasError('username') &&
               !usernameField?.hasError('required')
             "
           >
-            Username is required!
+            {{ 'LOGIN.USERNAME_REQUIRED_1' | translate }}
           </mat-error>
           <mat-error *ngIf="usernameField?.hasError('required')">
-            Username is <strong>required</strong>
+            <span [innerHTML]="'LOGIN.USERNAME_REQUIRED_2' | translate"></span>
           </mat-error>
           <input
             placeholder="sounishnath003"
@@ -47,17 +48,17 @@ import { AuthService } from 'src/app/shared/services/auth.service';
         </mat-form-field>
 
         <mat-form-field appearance="fill">
-          <mat-label> Password </mat-label>
+          <mat-label> {{ 'LOGIN.PASSWORD' | translate }} </mat-label>
           <mat-error
             *ngIf="
               passwordField?.hasError('password') &&
               !passwordField?.hasError('required')
             "
           >
-            Password is required!
+            {{ 'LOGIN.PASSWORD_REQUIRED_1' | translate }}
           </mat-error>
           <mat-error *ngIf="passwordField?.hasError('required')">
-            Password is <strong>required</strong>
+             <span [innerHTML]="'LOGIN.PASSWORD_REQUIRED_2' | translate"></span>
           </mat-error>
           <input
             placeholder="*** **** ***"
@@ -81,7 +82,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
           [color]="isSignup ? 'accent' : 'primary'"
           (click)="isSignup ? onSignup() : onSignin()"
         >
-          {{ isSignup ? 'Sign up' : 'Login' }} &rarr;
+          {{ (isSignup ? 'LOGIN.BTN_SIGNUP' : 'LOGIN.BTN_LOGIN') | translate }} &rarr;
         </button>
       </form>
 
@@ -92,15 +93,15 @@ import { AuthService } from 'src/app/shared/services/auth.service';
         fxLayoutGap="20px"
       >
         <div (click)="isSignup = !isSignup">
-          {{ isSignup ? 'Already have an account?' : 'Do not have account?' }}
+          {{ (isSignup ? 'LOGIN.ALREADY_HAVE' : 'LOGIN.DO_NOT_HAVE') | translate }}
           <span class="text-decor">
-            {{ isSignup ? 'Login' : 'Sign up' }}
+            {{ (isSignup ? 'LOGIN.BTN_LOGIN' : 'LOGIN.BTN_SIGNUP') | translate }}
           </span>
         </div>
         <div>|</div>
         <div>
-          Forgot password?
-          <span style="color: red; cursor: pointer;">Reset password</span>
+          {{ 'LOGIN.FORGOT_PASSWORD' | translate }}
+          <span style="color: red; cursor: pointer;">{{ 'LOGIN.RESET_PASSWORD' | translate }}</span>
         </div>
       </div>
     </div>
@@ -119,7 +120,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private readonly snackbar: MatSnackBar
+    private readonly snackbar: MatSnackBar,
+    private translate: TranslateService
   ) {
     this.form = new FormGroup({
       username: new FormControl('', [Validators.required]),
@@ -144,20 +146,22 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         this.form.reset();
         window.location.replace('/');
-        this.snackbar.open('App state re-initialized', 'Done', {
-          duration: 3000,
+        this.translate.get('LOGIN.APP_STATE_REINIT').subscribe((res: string) => {
+          this.snackbar.open(res, this.translate.instant('COMMON.DONE'), {
+            duration: 3000,
+          });
         });
       },
       error: (error) => {
         const e = error.message;
         if (typeof e === 'string') {
           this.errors = [e];
-          this.snackbar.open(e, 'Cancel', {
+          this.snackbar.open(e, this.translate.instant('COMMON.CANCEL'), {
             duration: 3000,
             panelClass: ['bg-red-600', 'text-white'],
           });
         } else {
-          this.errors = [...(error.error.message || `something went wrong!`)];
+          this.errors = [...(error.error.message || this.translate.instant('LOGIN.SOMETHING_WENT_WRONG'))];
         }
       },
     });
@@ -170,20 +174,22 @@ export class LoginComponent implements OnInit {
         const { redirectTo } = this.route.snapshot.queryParams;
         this.form.reset();
         window.location.replace(redirectTo || '/');
-        this.snackbar.open('You are logged in', 'Done', {
-          duration: 3000,
+        this.translate.get('LOGIN.YOU_ARE_LOGGED_IN').subscribe((res: string) => {
+          this.snackbar.open(res, this.translate.instant('COMMON.DONE'), {
+            duration: 3000,
+          });
         });
       },
       error: (error) => {
         const e = error.message;
         if (typeof e === 'string') {
           this.errors = [e];
-          this.snackbar.open(e, 'Cancel', {
+          this.snackbar.open(e, this.translate.instant('COMMON.CANCEL'), {
             duration: 3000,
             panelClass: ['bg-red-600', 'text-white'],
           });
         } else {
-          this.errors = [...(error.error.message || `something went wrong!`)];
+          this.errors = [...(error.error.message || this.translate.instant('LOGIN.SOMETHING_WENT_WRONG'))];
         }
       },
     });

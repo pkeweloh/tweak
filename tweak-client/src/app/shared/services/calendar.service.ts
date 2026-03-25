@@ -20,8 +20,8 @@ export class CalendarService {
     'July', 'August', 'September', 'October', 'November', 'December',
   ];
 
-  private monthWithYearSubject: BehaviorSubject<string>;
-  public monthWithYear$: Observable<string>;
+  private monthWithYearSubject: BehaviorSubject<{ month: number, year: number }>;
+  public monthWithYear$: Observable<{ month: number, year: number }>;
 
   private calendarWeekSubject: BehaviorSubject<Array<Date>>;
   public calenderWeek$: Observable<Array<Date>>;
@@ -36,7 +36,7 @@ export class CalendarService {
     );
     this.calenderWeek$ = this.calendarWeekSubject.asObservable();
 
-    this.monthWithYearSubject = new BehaviorSubject(this.getCurrentMonthWithYear());
+    this.monthWithYearSubject = new BehaviorSubject(this.getCurrentMonthAndYear());
     this.monthWithYear$ = this.monthWithYearSubject.asObservable();
   }
 
@@ -51,7 +51,7 @@ export class CalendarService {
 
     this.weekEndDate = this.addDays(this.weekStartDate, 6);
     this.calendarWeekSubject.next(this.generateWeek(this.weekStartDate));
-    this.monthWithYearSubject.next(this.getCurrentMonthWithYear());
+    this.monthWithYearSubject.next(this.getCurrentMonthAndYear());
   }
 
   // --- Helper Methods ---
@@ -79,16 +79,10 @@ export class CalendarService {
     return result;
   }
 
-  private getCurrentMonth(): string {
-    // If the week spans two months, show the month of the Thursday (middle of week)
-    // or just the Start Date's month for simplicity. Tweek usually shows Start Date month.
-    const monthIndex: number = this.weekStartDate.getMonth();
-    return this.MONTHS_MAPPING[monthIndex];
-  }
-
-  public getCurrentMonthWithYear(): string {
-    const month = this.getCurrentMonth();
-    const year = this.weekStartDate.getFullYear(); // Use the week's year, not today's
-    return `${month} ${year}`;
+  public getCurrentMonthAndYear(): { month: number, year: number } {
+    return {
+      month: this.weekStartDate.getMonth(),
+      year: this.weekStartDate.getFullYear()
+    };
   }
 }

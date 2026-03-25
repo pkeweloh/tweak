@@ -7,6 +7,7 @@ import {
 } from 'src/app/shared/services/calendar.service';
 import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
@@ -33,17 +34,26 @@ import { MatSnackBar } from '@angular/material/snack-bar';
           </button>
         </div>
 
-        <div class="m-auto">
-          <span>{{ monthWithYear$ | async }}</span>
+        <div class="m-auto" *ngIf="monthWithYear$ | async as data">
+          <span>{{ 'CALENDER.MONTHS.' + data.month | translate }} {{ data.year }}</span>
         </div>
       </div>
       <div class="m-auto flex-1"></div>
 
-        <div class="m-auto">
+        <div class="m-auto flex items-center space-x-4">
+          <button [matMenuTriggerFor]="langMenu" class="flex items-center space-x-1 uppercase text-sm font-medium border border-gray-300 rounded px-2 py-1">
+            <span>{{ translate.currentLang }}</span>
+            <mat-icon style="font-size: 18px; width: 18px; height: 18px;">language</mat-icon>
+          </button>
+          <mat-menu #langMenu="matMenu">
+            <button mat-menu-item (click)="useLanguage('en')">English</button>
+            <button mat-menu-item (click)="useLanguage('es')">Español</button>
+          </mat-menu>
+
           <button [matMenuTriggerFor]="menu">@{{ currentUsername }} 👋 </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="onRollover()">Move Unfinished Tasks</button>
-            <button mat-menu-item (click)="onLogout()">Log out</button>
+            <button mat-menu-item (click)="onRollover()">{{ 'HEADER.MOVE_UNFINISHED' | translate }}</button>
+            <button mat-menu-item (click)="onLogout()">{{ 'HEADER.LOGOUT' | translate }}</button>
           </mat-menu>
         </div>
     </div>
@@ -52,7 +62,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class HeaderComponent implements OnInit {
   currentUsername: string = 'sounish';
-  monthWithYear$: Observable<string> = new Observable<string>();
+  monthWithYear$: Observable<{ month: number, year: number }>;
 
   /**
    *
@@ -85,13 +95,19 @@ export class HeaderComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly calendarService: CalendarService,
     private readonly weekSchedulerService: WeekSchedulerService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    public translate: TranslateService
   ) {
     this.currentUsername = this.authService.userAuthState.username;
     this.monthWithYear$ = this.calendarService.monthWithYear$;
   }
 
   ngOnInit(): void { }
+
+  useLanguage(language: string) {
+    this.translate.use(language);
+    localStorage.setItem('lang', language);
+  }
 
   onLogout() {
     this.authService.logout();
@@ -100,14 +116,13 @@ export class HeaderComponent implements OnInit {
   onRollover() {
     this.weekSchedulerService.triggerRollover().subscribe((response: any) => {
       const count = response.count || 0;
-      const message =
-        count > 0
-          ? `🚀 Rollover complete! Moved ${count} tasks to today.`
-          : '✅ No unfinished tasks to move.';
-
-      this.snackbar.open(message, 'Done', {
-        duration: 3000,
-        panelClass: ['bg-[#5167F4]', 'text-white'],
+      
+      const translationKey = count > 0 ? 'HEADER.ROLLOVER_COMPLETE' : 'HEADER.NO_UNFINISHED';
+      this.translate.get(translationKey, { count }).subscribe((message: string) => {
+        this.snackbar.open(message, this.translate.instant('COMMON.DONE'), {
+          duration: 3000,
+          panelClass: ['bg-[#5167F4]', 'text-white'],
+        });
       });
     });
   }

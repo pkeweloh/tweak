@@ -6,6 +6,7 @@ import {
   MatSnackBarRef,
   TextOnlySnackBar,
 } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.service';
 import { ColorUtils } from 'src/app/shared/utils/colors.utils';
@@ -28,7 +29,7 @@ import { Schedule } from 'src/app/shared/utils/types.utils';
     <form [formGroup]="formGroup">
       <div class="flex flex-row flex-wrap justify-between items-start">
         <mat-form-field>
-          <mat-label> Date: </mat-label>
+          <mat-label> {{ 'CALENDER.DATE_LABEL' | translate }} </mat-label>
           <input
             formControlName="date"
             [value]="scheduleData.date"
@@ -51,7 +52,7 @@ import { Schedule } from 'src/app/shared/utils/types.utils';
       </div>
       <div mat-dialog-content>
         <mat-form-field appearance="fill" class="min-w-full">
-          <mat-label> Your Todo </mat-label>
+          <mat-label> {{ 'CALENDER.TODO_LABEL' | translate }} </mat-label>
           <textarea
             formControlName="todo"
             matInput
@@ -60,7 +61,7 @@ import { Schedule } from 'src/app/shared/utils/types.utils';
         </mat-form-field>
 
         <div>
-          <mat-label> Assign Color: </mat-label>
+          <mat-label> {{ 'CALENDER.ASSIGN_COLOR_LABEL' | translate }} </mat-label>
           <div class="flex flex-wrap justify-start items-center space-x-4 my-3">
             <button
               *ngFor="let color of colors; let idx = index"
@@ -75,14 +76,14 @@ import { Schedule } from 'src/app/shared/utils/types.utils';
       </div>
       <div mat-dialog-actions class="flex justify-end">
         <button color="accent" mat-button [mat-dialog-close]="onCancel()">
-          Cancel
+          {{ 'COMMON.CANCEL' | translate }}
         </button>
         <button
           mat-button
           [mat-dialog-close]="onSave()"
           color="primary"
         >
-          Save
+          {{ 'COMMON.SAVE' | translate }}
         </button>
       </div>
     </form>
@@ -113,7 +114,8 @@ export class DialoagboxComponent implements OnInit {
     private weeklyScheduleService: WeekSchedulerService,
     @Inject(MAT_DIALOG_DATA)
     private dialogData: { payload: Schedule; reference: MatDialog },
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private translate: TranslateService
   ) {
     this.scheduleData = dialogData.payload;
     this.formGroup.patchValue({ ...this.scheduleData });
@@ -151,24 +153,29 @@ export class DialoagboxComponent implements OnInit {
       .deleteSchedule({ ...this.scheduleData })
       .subscribe((response) => {
         this.dialogData.reference.closeAll();
-        const snackbarRef: MatSnackBarRef<TextOnlySnackBar> =
-          this.snackbar.open('Schedule has been deleted.', 'Undo', {
-            duration: 5000,
-            panelClass: ['bg-red-600', 'text-white'],
-          });
-
-        snackbarRef.onAction().subscribe(() => {
-          this.weeklyScheduleService
-            .createSchedule({
-              ...this.scheduleData,
-              colorCode: String(this.scheduleData.colorCode),
-            })
-            .subscribe((response) => {
-              this.snackbar.open('Schedule has been restored.', 'Done', {
-                duration: 3000,
-                panelClass: ['bg-green-600', 'text-white'],
-              });
+        
+        this.translate.get('CALENDER.SCHEDULE_DELETED').subscribe((message: string) => {
+          const snackbarRef: MatSnackBarRef<TextOnlySnackBar> =
+            this.snackbar.open(message, this.translate.instant('COMMON.UNDO'), {
+              duration: 5000,
+              panelClass: ['bg-red-600', 'text-white'],
             });
+
+          snackbarRef.onAction().subscribe(() => {
+            this.weeklyScheduleService
+              .createSchedule({
+                ...this.scheduleData,
+                colorCode: String(this.scheduleData.colorCode),
+              })
+              .subscribe((response) => {
+                this.translate.get('CALENDER.SCHEDULE_RESTORED').subscribe((restoredMsg: string) => {
+                  this.snackbar.open(restoredMsg, this.translate.instant('COMMON.DONE'), {
+                    duration: 3000,
+                    panelClass: ['bg-green-600', 'text-white'],
+                  });
+                });
+              });
+          });
         });
       });
   }

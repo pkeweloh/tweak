@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.service';
 import { Schedule } from 'src/app/shared/utils/types.utils';
 
@@ -44,7 +45,11 @@ import { Schedule } from 'src/app/shared/utils/types.utils';
 export class AddFormComponent implements OnInit {
   @Input() date!: Date;
   @Input() isSomeday?: number | null;
-  constructor(private readonly weeklyScheduleService: WeekSchedulerService, private snackbar: MatSnackBar) { }
+  constructor(
+    private readonly weeklyScheduleService: WeekSchedulerService,
+    private snackbar: MatSnackBar,
+    private translate: TranslateService
+  ) { }
 
   isSubmitting = false;
 
@@ -76,7 +81,9 @@ export class AddFormComponent implements OnInit {
       .createSchedule(formData)
       .subscribe({
         next: (response) => {
-          this.snackbar.open(`New schedule has been created!`, 'Cancel', { duration: 3000 });
+          this.translate.get('CALENDER.NEW_SCHEDULE_CREATED').subscribe((res: string) => {
+            this.snackbar.open(res, this.translate.instant('COMMON.CANCEL'), { duration: 3000 });
+          });
           this.isSubmitting = false;
         },
         error: (err) => {

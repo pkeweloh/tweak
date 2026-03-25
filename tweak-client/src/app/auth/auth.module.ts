@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { MaterialModule } from '../material/material.module';
 import { AuthService } from '../shared/services/auth.service';
 import { AuthRoutingModule } from './auth-routing.module';
@@ -15,7 +16,7 @@ import { LoginComponent } from './login/login.component';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    // HttpClientModule,
+    TranslateModule,
   ],
   providers: [AuthService],
   exports: [],
