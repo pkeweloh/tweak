@@ -1,7 +1,7 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.service';
 import { ColorUtils } from 'src/app/shared/utils/colors.utils';
 import { Schedule } from 'src/app/shared/utils/types.utils';
@@ -91,6 +91,7 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
   editForms: Array<FormGroup> = [];
   draggedIndex: number = -1;
   isDragging: boolean = false;
+  private activeDialogRef: MatDialogRef<DialoagboxComponent> | null = null;
 
   get isSomedayValue(): number | null {
     if (this.listId && this.listId.startsWith('Someday')) {
@@ -152,15 +153,19 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
   }
 
   launchDialog(_: MouseEvent, form: FormGroup) {
-    if (this.isDragging) return;
+    if (this.isDragging || this.activeDialogRef) return;
 
     const previousState = { ...form.value };
     const dialogRef = this.dialog.open(DialoagboxComponent, {
       width: '600px',
-      data: { payload: form.value, reference: this.dialog },
+      data: { payload: form.value, reference: this.dialog, isSomedayList: this.isSomedayList },
+      panelClass: 'light-dialog-panel'
     });
 
+    this.activeDialogRef = dialogRef;
+
     dialogRef.afterClosed().subscribe((result) => {
+      this.activeDialogRef = null;
       if (!result) return;
       form.patchValue({ ...result });
       if (JSON.stringify(previousState) === JSON.stringify({ ...form.value }))

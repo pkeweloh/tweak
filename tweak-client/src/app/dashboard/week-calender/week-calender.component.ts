@@ -10,7 +10,7 @@ import { DragSropShareService } from './drag-share.service';
 @Component({
   selector: 'app-week-calender',
   template: `
-    <div class="my-3 p-2 overflow-x-auto overflow-y-hidden">
+    <div class="px-5 pt-12 overflow-x-auto overflow-y-hidden">
       <div class="grid-6-col" cdkDropListGroup>
         <!-- Weekdays (Mon-Fri) -->
         <div
@@ -29,7 +29,7 @@ import { DragSropShareService } from './drag-share.service';
             </div>
             <div class="flex-1"></div>
             <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
-              {{ 'CALENDER.DAYS.' + (date | date: 'EEEE' | uppercase) | translate }}
+                {{ weekdayTranslationKeys[date.getDay()] | translate }}
             </div>
           </div>
           <app-daily-todo
@@ -57,7 +57,7 @@ import { DragSropShareService } from './drag-share.service';
                 </div>
                 <div class="flex-1"></div>
                 <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
-                  {{ 'CALENDER.DAYS.' + (date | date: 'EEEE' | uppercase) | translate }}
+                {{ weekdayTranslationKeys[date.getDay()] | translate }}
                 </div>
               </div>
               <app-daily-todo
@@ -84,7 +84,7 @@ import { DragSropShareService } from './drag-share.service';
                 </div>
                 <div class="flex-1"></div>
                 <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
-                  {{ 'CALENDER.DAYS.' + (date | date: 'EEEE' | uppercase) | translate }}
+                  {{ weekdayTranslationKeys[date.getDay()] | translate }}
                 </div>
               </div>
               <app-daily-todo
@@ -123,7 +123,7 @@ import { DragSropShareService } from './drag-share.service';
   `,
   styleUrls: ['./week-calender.component.css'],
 })
-export class WeekCalenderComponent implements OnInit {
+export class WeekCalenderComponent implements OnInit, OnDestroy {
   weekDays: Date[] = [];
   somedayLists: string[] = ['Someday-0', 'Someday-1', 'Someday-2'];
   subscriptions: Array<Subscription> = [];
@@ -132,6 +132,15 @@ export class WeekCalenderComponent implements OnInit {
   wdMaxRows: number = 10;
   satMaxRows: number = 4;
   sunMaxRows: number = 4;
+  weekdayTranslationKeys: string[] = [
+    'CALENDER.DAYS.SUNDAY',
+    'CALENDER.DAYS.MONDAY',
+    'CALENDER.DAYS.TUESDAY',
+    'CALENDER.DAYS.WEDNESDAY',
+    'CALENDER.DAYS.THURSDAY',
+    'CALENDER.DAYS.FRIDAY',
+    'CALENDER.DAYS.SATURDAY',
+  ];
 
   constructor(
     private readonly weekSchedulerService: WeekSchedulerService,
@@ -169,6 +178,10 @@ export class WeekCalenderComponent implements OnInit {
         panelClass: ['bg-[#5167F4]', 'text-white'],
       });
     });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   private registerSubscriptions(callback: Function) {

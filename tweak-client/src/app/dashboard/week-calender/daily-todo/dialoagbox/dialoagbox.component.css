@@ -1,10 +1,150 @@
-.bg-green-420 {
-  background-color: #22ffa1;
-}
-.bg-yellow-420 {
-  background-color: #fdef5d;
+:host {
+  display: block;
+  background-color: #ffffff;
 }
 
-.bg-blue-420 {
-  background-color: #a3b1ff;
+.dialog-container {
+  padding: 18px 20px;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
+}
+
+.todo-input {
+  color: #0f0f0f !important;
+  background: transparent;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  min-height: 48px;
+  padding: 10px 20px 6px 8px;
+  border: none;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.25);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  resize: none;
+  height: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.todo-input.todo-done-text {
+  opacity: 0.4;
+}
+
+.todo-input::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.btn-cancel {
+  color: #0f0f0f !important;
+  font-weight: 500 !important;
+}
+
+.btn-save {
+  background-color: #0f0f0f !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  padding: 0 32px !important;
+}
+
+.dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.date-button {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  border: none;
+  background: none;
+  padding: 0;
+  color: #0f0f0f;
+  cursor: pointer;
+  font: inherit;
+  outline: none;
+}
+
+.date-button:focus-visible {
+  outline: none;
+}
+
+.date-button mat-icon {
+  font-size: 18px;
+  opacity: 0.6;
+}
+
+.hidden-datepicker {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.todo-field {
+  width: 100%;
+  padding: 0 8px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.todo-input:focus {
+  outline: none;
+  border-bottom-color: rgba(0, 0, 0, 0.35);
+  box-shadow: none;
+}
+
+.todo-checkbox {
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  margin: 0;
+  opacity: 1;
+  transition: none;
+  z-index: 3;
+}
+
+.todo-field::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  width: 38px;
+  height: 1.25rem;
+  background: #ffffff;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.color-selector {
+  padding: 0 8px;
+}
+
+.color-selector label {
+  color: #000000;
+  font-weight: 500;
+}
+
+.color-selector button {
+  border-color: #000000;
+}
+
+.dialog-color-circle {
+  border-color: #000000 !important;
+}
+
+::ng-deep .mat-calendar {
+  height: auto !important;
+}
+
+::ng-deep .mat-calendar-header {
+  padding: 0 !important;
+}
+
+::ng-deep .mat-calendar-body .mat-calendar-body-label {
+  display: none !important;
 }

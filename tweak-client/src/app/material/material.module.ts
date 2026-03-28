@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, DateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,6 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MondayDateAdapter } from '../shared/intl/monday-date-adapter.service';
 
 const matModules = [
   MatFormFieldModule,
@@ -26,11 +28,18 @@ const matModules = [
   MatSnackBarModule,
   DragDropModule,
   MatIconModule,
+  MatTooltipModule,
 ];
 
 @NgModule({
   declarations: [],
   imports: [CommonModule, ...matModules],
   exports: [...matModules],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MondayDateAdapter,
+    },
+  ],
 })
 export class MaterialModule {}

@@ -134,9 +134,87 @@ body {
 }
 
 .col-span-2 {
-  grid-column: span 2 / span 2;
+  grid-column: span 6 / span 6;
 }
 
 .col-span-6 {
   grid-column: span 6 / span 6;
+}
+
+/* Consolidated Absolute Global Menu Styling */
+.mat-mdc-menu-panel,
+.mat-menu-panel,
+.mat-mdc-menu-content,
+.mat-menu-content,
+.mdc-menu-surface,
+.custom-menu-panel {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  border: none !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12) !important;
+  /* MDC Variables */
+  --mat-menu-container-color: #ffffff !important;
+  --mdc-menu-container-color: #ffffff !important;
+  --mat-menu-container-shape: 12px !important;
+  --mdc-menu-container-shape: 12px !important;
+  --mdc-menu-surface-container-color: #ffffff !important;
+}
+
+.mat-mdc-menu-item,
+.mat-menu-item,
+.custom-menu-panel .mat-mdc-menu-item {
+  color: #000000 !important;
+  font-family: 'SuisseIntl', 'Inter', sans-serif !important;
+  height: 44px !important;
+  line-height: 44px !important;
+  padding: 0 16px !important;
+  font-size: 14px !important;
+}
+
+.mat-mdc-menu-item:hover,
+.mat-menu-item:hover,
+.custom-menu-panel .mat-mdc-menu-item:hover {
+  background-color: #f2f2f7 !important;
+}
+
+.mat-mdc-menu-item .mat-icon,
+.mat-menu-item .mat-icon,
+.custom-menu-panel .mat-icon {
+  color: #000000 !important;
+  margin-right: 12px !important;
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.menu-separator {
+  height: 1px;
+  background-color: #0000001a;
+  margin: 4px 0;
+}
+
+/* Custom Tooltip Styling */
+.mat-tooltip,
+.mat-mdc-tooltip {
+  background-color: #222222cc !important;
+  color: #ffffff !important;
+  font-size: 12px !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  font-family: 'SuisseIntl', 'Inter', sans-serif !important;
+}
+
+/* Light Dialog Styling */
+.light-dialog-panel .mat-dialog-container,
+.light-dialog-panel .mat-mdc-dialog-container,
+.light-dialog-panel .mdc-dialog__surface {
+  background-color: #f2f2f7 !important;
+  background: #f2f2f7 !important;
+  border-radius: 4px !important;
+  /* Maintaining square look */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  color: #000000 !important;
 }
