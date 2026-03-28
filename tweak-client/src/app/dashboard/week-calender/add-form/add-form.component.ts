@@ -75,6 +75,7 @@ export class AddFormComponent implements OnInit {
       isSomeday: this.isSomeday,
       colorCode: '0',
       finished: false,
+      notes: '',
     };
 
     this.weeklyScheduleService

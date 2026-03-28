@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateScheduleDto {
   @IsNotEmpty()
@@ -15,4 +15,8 @@ export class CreateScheduleDto {
   finished: boolean;
   username: string;
   isSomeday?: number | null;
+
+  @IsOptional()
+  @IsString()
+  notes?: string;
 }

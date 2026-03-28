@@ -14,6 +14,7 @@ export interface Schedule {
   colorCode: string;
   date: Date;
   todo: string;
+  notes?: string;
   createdAt: Date;
   order: number;
   __v: number;

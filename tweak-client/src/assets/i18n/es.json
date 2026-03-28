@@ -38,6 +38,7 @@
     "TODO_LABEL": "Tu Tarea",
     "DATE_LABEL": "Fecha:",
     "ASSIGN_COLOR_LABEL": "Asignar Color:",
+    "NOTES_PLACEHOLDER": "Añade algunas notas extra aquí...",
     "DAYS": {
       "SUNDAY": "dom",
       "MONDAY": "lun",

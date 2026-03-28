@@ -37,17 +37,6 @@
   color: rgba(0, 0, 0, 0.45);
 }
 
-.btn-cancel {
-  color: #0f0f0f !important;
-  font-weight: 500 !important;
-}
-
-.btn-save {
-  background-color: #0f0f0f !important;
-  color: #ffffff !important;
-  font-weight: 600 !important;
-  padding: 0 32px !important;
-}
 
 .dialog-body {
   display: flex;
@@ -147,4 +136,250 @@
 
 ::ng-deep .mat-calendar-body .mat-calendar-body-label {
   display: none !important;
+}
+
+.notes-section {
+  margin-top: 16px;
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.RichNotes-root {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+}
+
+.RichNotes-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px;
+}
+
+.RichNotes-button {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  border: none;
+  background: transparent;
+  color: rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  padding: 0 6px;
+}
+
+.RichNotes-button--active {
+  background-color: rgba(81, 103, 244, 0.25);
+  color: #000000;
+}
+
+.RichNotes-button[disabled] {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.RichNotes-button:focus,
+.RichNotes-button:focus-visible,
+.RichNotes-button:hover {
+  outline: none;
+  box-shadow: none;
+}
+
+.RichNotes-button i {
+  font-size: 16px;
+}
+
+.notes-editor {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  min-height: 118px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  font-family: inherit;
+  white-space: pre-wrap;
+  overflow-y: auto;
+  outline: none;
+  color: #0f172a;
+}
+
+.notes-editor:empty::before {
+  content: attr(data-placeholder);
+  color: #9ca3af;
+  white-space: pre-wrap;
+}
+
+:host ::ng-deep .notes-editor h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+  color: #0f172a;
+}
+
+:host ::ng-deep .notes-editor strong,
+:host ::ng-deep .notes-editor b {
+  font-weight: 600;
+  color: #111827;
+}
+
+:host ::ng-deep .notes-editor h4 strong,
+:host ::ng-deep .notes-editor h4 b {
+  font-weight: inherit;
+}
+
+:host ::ng-deep .notes-editor ul {
+  list-style: none;
+  margin: 0 0 0.6rem;
+  padding-left: 1.5rem;
+  line-height: 1.5;
+}
+
+:host ::ng-deep .notes-editor li {
+  position: relative;
+  padding-left: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+
+:host ::ng-deep .notes-editor li::before {
+  content: '\2014';
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 0.95rem;
+  color: #1f2937;
+}
+
+:host ::ng-deep .notes-editor blockquote {
+  margin: 0 0 0.6rem;
+  padding-left: 12px;
+  border-left: 3px solid #bfdbfe;
+  color: #475467;
+  font-style: italic;
+}
+
+:host ::ng-deep .notes-editor a {
+  color: #2563eb;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-tooltip {
+  position: absolute;
+  z-index: 20;
+  width: 280px;
+  max-width: 280px;
+  background: #000;
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 3px;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  pointer-events: auto;
+}
+
+.link-tooltip::after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+.link-tooltip--anchored::after {
+  display: block;
+  bottom: 100%;
+  left: 28px;
+  transform: translateX(-50%);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid #000;
+}
+
+.link-tooltip__text {
+  display: block;
+  font-size: 0.9rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.link-tooltip__actions {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
+.link-tooltip__actions button {
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  padding: 0;
+  text-align: center;
+}
+
+.link-tooltip__actions button:hover {
+  background: transparent;
+}
+
+.link-tooltip__actions button i {
+  font-size: 12px;
+}
+
+.link-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.9rem;
+}
+
+.link-input:focus {
+  outline: none;
+}
+
+.task-note-indicator {
+  margin-right: 6px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-note-indicator i {
+  font-size: 14px;
+  color: #5167f4;
 }

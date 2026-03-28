@@ -12,6 +12,12 @@ export class Schedule {
   todo: string;
 
   @Prop({
+    type: SchemaTypes.String,
+    default: '',
+  })
+  notes: string;
+
+  @Prop({
     type: SchemaTypes.Date,
     required: true,
   })

@@ -52,7 +52,6 @@ export class WeekSchedulerService implements OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-    console.warn('WeekScheduler Service Died...');
   }
 
   createSchedule(createSchedule: Partial<Schedule>) {
@@ -89,7 +88,6 @@ export class WeekSchedulerService implements OnDestroy {
               this.weekScheduleMap[object.date] = [...object.schedules];
             });
             this.weekScheduleMapSubject.next({ ...this.weekScheduleMap });
-            console.log(`[Refreshed]: Schedules Refreshed!`);
           }
         },
         error: (error) => {

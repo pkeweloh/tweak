@@ -38,6 +38,7 @@
     "TODO_LABEL": "Your Todo",
     "DATE_LABEL": "Date:",
     "ASSIGN_COLOR_LABEL": "Assign Color:",
+    "NOTES_PLACEHOLDER": "Add some extra notes here..",
     "DAYS": {
       "SUNDAY": "sun",
       "MONDAY": "mon",

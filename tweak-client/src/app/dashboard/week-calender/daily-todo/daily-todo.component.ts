@@ -48,14 +48,22 @@ import { DialoagboxComponent } from './dialoagbox/dialoagbox.component';
 
           <div *cdkDragPlaceholder class="drag-placeholder"></div>
 
-          <div class="flex-1 min-w-0 flex items-center">
+          <div class="flex-1 min-w-0 flex items-center gap-2">
             <div
-              class="outline-none border-none rounded-xl truncate inline-block px-1.5 max-w-full focus:bg-gray-50 focus:z-50"
+              class="outline-none border-none rounded-xl inline-flex items-center min-w-0 px-1.5 max-w-full"
               [ngClass]="getColor(work.colorCode)"
               [class.opacity-30]="work.finished"
               [class.line-through]="work.finished"
             >
-              {{ work.todo }}
+              <div
+                *ngIf="work.notes"
+                class="task-note-indicator"
+              >
+                <i class="fa fa-sticky-note" aria-hidden="true"></i>
+              </div>
+              <span class="truncate inline-block min-w-0 max-w-full">
+                {{ work.todo }}
+              </span>
             </div>
           </div>
           
@@ -78,7 +86,7 @@ import { DialoagboxComponent } from './dialoagbox/dialoagbox.component';
       </div>
     </div>
   `,
-  styleUrls: [],
+  styleUrls: ['./daily-todo.component.css'],
 })
 export class DailyTodoComponent implements OnInit, OnDestroy {
   @Input() date!: Date;
@@ -141,6 +149,7 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
       createdAt: new FormControl('', [Validators.requiredTrue]),
       order: new FormControl('', [Validators.requiredTrue]),
       isSomeday: new FormControl(null),
+      notes: new FormControl(''),
     });
 
     editForm.patchValue({ ...work });
