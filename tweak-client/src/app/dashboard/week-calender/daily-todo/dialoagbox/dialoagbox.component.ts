@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
@@ -19,13 +19,40 @@ type FormatAction = 'header' | 'bold' | 'list' | 'quote' | 'link';
   template: `
     <div class="dialog-container">
       <div class="dialog-header flex justify-between items-center mb-6">
-        <div class="flex items-center gap-3">
-          <div
-            [ngClass]="[
-              'w-6 h-6 rounded-full border dialog-color-circle',
-              selectedColor()
-            ]"
-          ></div>
+        <div class="flex items-center gap-2">
+          <div class="color-menu color-menu--leading" [class.color-menu--open]="isColorMenuOpen">
+            <button
+              type="button"
+              class="color-menu-trigger color-menu-trigger--circle"
+              (click)="toggleColorMenu($event)"
+              aria-label="Assign color"
+            >
+              <div
+                [ngClass]="[
+                  'w-6 h-6 rounded-full border dialog-color-circle',
+                  selectedColor()
+                ]"
+              ></div>
+            </button>
+
+            <div
+              class="color-menu-overlay color-menu-overlay--leading"
+              *ngIf="isColorMenuOpen"
+              (click)="$event.stopPropagation()"
+            >
+              <button
+                type="button"
+                *ngFor="let color of colors; let idx = index"
+                [ngClass]="[
+                  'color-menu-option',
+                  generateColor(idx),
+                  currentColorIndex() === idx ? 'color-menu-option--selected' : ''
+                ]"
+                (click)="setColor(idx, true)"
+                [attr.aria-label]="'Select color ' + (idx + 1)"
+              ></button>
+            </div>
+          </div>
           <div class="text-xl font-bold text-gray-800">
             <ng-container *ngIf="!isSomedayTask; else somedayLabel">
               <button
@@ -42,11 +69,13 @@ type FormatAction = 'header' | 'bold' | 'list' | 'quote' | 'link';
             </ng-template>
           </div>
         </div>
-        <div
-          (click)="onDelete()"
-          class="delete-btn p-2 rounded hover:bg-gray-200 cursor-pointer transition-colors"
-        >
-          <mat-icon style="color: #666;">delete_outline</mat-icon>
+        <div class="dialog-header-actions">
+          <div
+            (click)="onDelete()"
+            class="delete-btn p-2 rounded hover:bg-gray-200 cursor-pointer transition-colors"
+          >
+            <mat-icon style="color: #666;">delete_outline</mat-icon>
+          </div>
         </div>
       </div>
 
@@ -81,22 +110,6 @@ type FormatAction = 'header' | 'bold' | 'list' | 'quote' | 'link';
             (change)="toggleFinish($event.checked)"
             aria-label="Mark schedule finished"
           ></mat-checkbox>
-        </div>
-
-        <div class="mb-8 color-selector">
-          <label class="block text-sm font-medium text-gray-500 mb-3">
-            {{ 'CALENDER.ASSIGN_COLOR_LABEL' | translate }}
-          </label>
-          <div class="flex flex-wrap gap-4">
-            <button
-              *ngFor="let color of colors; let idx = index"
-              [class]="
-                'w-6 h-6 rounded-full border border-gray-600 cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-black ' + 
-                generateColor(idx)
-              "
-              (click)="setColor(idx)"
-            ></button>
-          </div>
         </div>
 
         <div class="notes-section" #notesSection>
@@ -235,6 +248,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
   linkTooltipVisible = false;
   linkTooltipMode: 'insert' | 'edit' | 'preview' = 'insert';
   linkTooltipInputValue = '';
+  isColorMenuOpen = false;
   activeAnchorElement?: HTMLAnchorElement;
   isEditorActive: boolean = false;
   isBoldActive: boolean = false;
@@ -322,11 +336,24 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
     this.weeklyScheduleService.updateSchedule(payload).subscribe(() => {});
   }
 
-  setColor(idx: number) {
+  @HostListener('document:click')
+  onDocumentClick() {
+    this.isColorMenuOpen = false;
+  }
+
+  toggleColorMenu(event: MouseEvent) {
+    event.stopPropagation();
+    this.isColorMenuOpen = !this.isColorMenuOpen;
+  }
+
+  setColor(idx: number, closeMenu: boolean = false) {
     this.colorCode = idx;
     const colorValue = String(idx);
     this.formGroup.patchValue({ colorCode: colorValue });
     this.scheduleData = { ...this.scheduleData, colorCode: colorValue };
+    if (closeMenu) {
+      this.isColorMenuOpen = false;
+    }
   }
 
   checkNotToProvidePreviousWeek(d: Date | null) {
@@ -1580,7 +1607,11 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
     return ` ${ColorUtils.COLORS[id]}`;
   }
 
+  currentColorIndex() {
+    return this.colorCode === -1 ? +this.scheduleData.colorCode : this.colorCode;
+  }
+
   selectedColor() {
-    return ` ${ColorUtils.COLORS[+this.scheduleData.colorCode]}`;
+    return ` ${ColorUtils.COLORS[this.currentColorIndex()]}`;
   }
 }

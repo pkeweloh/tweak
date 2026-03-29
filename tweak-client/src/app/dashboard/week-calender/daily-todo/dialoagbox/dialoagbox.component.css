@@ -11,6 +11,12 @@
   box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
 }
 
+.dialog-header-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
 .todo-input {
   color: #0f0f0f !important;
   background: transparent;
@@ -37,6 +43,18 @@
   color: rgba(0, 0, 0, 0.45);
 }
 
+/*
+.btn-cancel {
+  color: #0f0f0f !important;
+  font-weight: 500 !important;
+}
+
+.btn-save {
+  background-color: #0f0f0f !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  padding: 0 32px !important;
+}*/
 
 .dialog-body {
   display: flex;
@@ -109,21 +127,81 @@
   z-index: 1;
 }
 
-.color-selector {
-  padding: 0 8px;
-}
-
-.color-selector label {
-  color: #000000;
-  font-weight: 500;
-}
-
-.color-selector button {
-  border-color: #000000;
-}
-
 .dialog-color-circle {
   border-color: #000000 !important;
+}
+
+.color-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.color-menu-trigger {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  padding: 0;
+}
+
+.color-menu-trigger--circle {
+  border-radius: 9999px;
+}
+
+.color-menu-trigger:hover,
+.color-menu--open .color-menu-trigger {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.color-menu-trigger:focus,
+.color-menu-trigger:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.color-menu-overlay {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  width: 158px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+}
+
+.color-menu-overlay--leading {
+  left: 0;
+  right: auto;
+}
+
+.color-menu-option {
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  border: 1px solid #000000;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  padding: 0;
+}
+
+.color-menu-option:hover {
+  transform: scale(1.08);
+}
+
+.color-menu-option--selected {
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #111827;
 }
 
 ::ng-deep .mat-calendar {
@@ -139,7 +217,6 @@
 }
 
 .notes-section {
-  margin-top: 16px;
   padding: 0 8px;
   display: flex;
   flex-direction: column;
@@ -206,7 +283,6 @@
   border: none;
   background: transparent;
   padding: 0;
-  min-height: 118px;
   font-size: 0.95rem;
   line-height: 1.5;
   font-family: inherit;
@@ -214,6 +290,10 @@
   overflow-y: auto;
   outline: none;
   color: #0f172a;
+}
+
+.notes-editor:empty {
+  min-height: 0;
 }
 
 .notes-editor:empty::before {
