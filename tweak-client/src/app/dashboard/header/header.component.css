@@ -19,6 +19,14 @@
   text-transform: capitalize;
 }
 
+.month-year--link {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  color: #5167F4;
+}
+
 .action-buttons {
   display: flex;
   align-items: center;

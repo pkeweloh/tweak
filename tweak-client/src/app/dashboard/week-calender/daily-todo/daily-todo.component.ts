@@ -168,7 +168,7 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DialoagboxComponent, {
       width: '600px',
       data: { payload: form.value, reference: this.dialog, isSomedayList: this.isSomedayList },
-      panelClass: 'light-dialog-panel'
+      panelClass: 'dialog-panel'
     });
 
     this.activeDialogRef = dialogRef;

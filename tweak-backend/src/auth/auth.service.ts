@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -12,9 +13,24 @@ import {
   generateHashPassword,
 } from 'src/shared/utils/bcrypt.utils';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserSettingsDto } from './dto/update-user-settings.dto';
 import { UserDto } from './dto/user.dto';
 import { JwtPayload } from './jwt-payload.interface';
-import { User, UserDocument } from './schema/user.schema';
+import {
+  DEFAULT_USER_SETTINGS,
+  User,
+  UserDocument,
+} from './schema/user.schema';
+
+type AuthResponse = {
+  accessToken: string;
+  user: {
+    username: string;
+    language: string;
+    weekStartsOn: string;
+    dateFormat: string;
+  };
+};
 
 @Injectable()
 export class AuthService {
@@ -25,7 +41,7 @@ export class AuthService {
 
   async signupWithUsernamePassword(
     createUserDto: CreateUserDto,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<AuthResponse> {
     try {
       const { username, password } = createUserDto;
       const isExists = await this.userModel.findOne({
@@ -37,11 +53,15 @@ export class AuthService {
       );
       if (error) throw error;
 
-      const user = new this.userModel({ username, password: data });
+      const user = new this.userModel({
+        username,
+        password: data,
+        ...DEFAULT_USER_SETTINGS,
+      });
       await user.save();
       const payload: JwtPayload = { username };
       const accessToken: string = this.jwtService.sign(payload);
-      return { accessToken };
+      return this.buildAuthResponse(user, accessToken);
     } catch (error: any) {
       throw error;
     }
@@ -49,7 +69,7 @@ export class AuthService {
 
   async loginWithUsernamePassword(
     filterUserParams: FilterQuery<UserDto>,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<AuthResponse> {
     try {
       const { username, password } = filterUserParams;
       const isExists = await this.userModel.findOne({
@@ -68,9 +88,55 @@ export class AuthService {
 
       const payload: JwtPayload = { username };
       const accessToken: string = this.jwtService.sign(payload);
-      return { accessToken };
+      return this.buildAuthResponse(isExists, accessToken);
     } catch (error) {
       throw error;
     }
+  }
+
+  async getCurrentUser(username: string) {
+    const user = await this.userModel.findOne({ username });
+    if (!user) {
+      throw new NotFoundException(`${username} does not exists!`);
+    }
+
+    return this.serializeUser(user);
+  }
+
+  async updateCurrentUserSettings(
+    username: string,
+    updateUserSettingsDto: UpdateUserSettingsDto,
+  ) {
+    if (!Object.keys(updateUserSettingsDto).length) {
+      throw new BadRequestException('No settings provided');
+    }
+
+    const user = await this.userModel.findOneAndUpdate(
+      { username },
+      { $set: updateUserSettingsDto },
+      { new: true },
+    );
+
+    if (!user) {
+      throw new NotFoundException(`${username} does not exists!`);
+    }
+
+    return this.serializeUser(user);
+  }
+
+  private buildAuthResponse(user: UserDocument, accessToken: string): AuthResponse {
+    return {
+      accessToken,
+      user: this.serializeUser(user),
+    };
+  }
+
+  private serializeUser(user: UserDocument) {
+    return {
+      username: user.username,
+      language: user.language || DEFAULT_USER_SETTINGS.language,
+      weekStartsOn: user.weekStartsOn || DEFAULT_USER_SETTINGS.weekStartsOn,
+      dateFormat: user.dateFormat || DEFAULT_USER_SETTINGS.dateFormat,
+    };
   }
 }

@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { AuthService, UserSettings } from 'src/app/shared/services/auth.service';
 import { CalendarService } from 'src/app/shared/services/calendar.service';
 import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.service';
 import { DragSropShareService } from './drag-share.service';
@@ -22,14 +23,14 @@ import { DragSropShareService } from './drag-share.service';
               'flex flex-row items-baseline border-b-2 h-[45px] px-1 box-border' +
               setTodaysColor(date)
             "
-            style="letter-spacing: -0.5px;"
+              style="letter-spacing: -0.5px;"
           >
             <div class="font-bold text-[21px]">
-              {{ date | date: 'd' }} {{ 'CALENDER.MONTHS_SHORT.' + date.getMonth() | translate }}
+              {{ date | date: calendarHeaderDateFormat : undefined : currentLocale }}
             </div>
             <div class="flex-1"></div>
             <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
-                {{ weekdayTranslationKeys[date.getDay()] | translate }}
+                {{ date | date: 'EEE' : undefined : currentLocale | titlecase }}
             </div>
           </div>
           <app-daily-todo
@@ -53,11 +54,11 @@ import { DragSropShareService } from './drag-share.service';
                 style="letter-spacing: -0.5px;"
               >
                 <div class="font-bold text-[21px]">
-                  {{ date | date: 'd' }} {{ 'CALENDER.MONTHS_SHORT.' + date.getMonth() | translate }}
+                  {{ date | date: calendarHeaderDateFormat : undefined : currentLocale }}
                 </div>
                 <div class="flex-1"></div>
                 <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
-                {{ weekdayTranslationKeys[date.getDay()] | translate }}
+                {{ date | date: 'EEE' : undefined : currentLocale | titlecase }}
                 </div>
               </div>
               <app-daily-todo
@@ -80,11 +81,11 @@ import { DragSropShareService } from './drag-share.service';
                 style="letter-spacing: -0.5px;"
               >
                 <div class="font-bold text-[21px]">
-                  {{ date | date: 'd' }} {{ 'CALENDER.MONTHS_SHORT.' + date.getMonth() | translate }}
+                  {{ date | date: calendarHeaderDateFormat : undefined : currentLocale }}
                 </div>
                 <div class="flex-1"></div>
                 <div [class]="'text-[21px] capitalize ' + setTodaysColorByOpacity(date)">
-                  {{ weekdayTranslationKeys[date.getDay()] | translate }}
+                  {{ date | date: 'EEE' : undefined : currentLocale | titlecase }}
                 </div>
               </div>
               <app-daily-todo
@@ -132,25 +133,21 @@ export class WeekCalenderComponent implements OnInit, OnDestroy {
   wdMaxRows: number = 10;
   satMaxRows: number = 4;
   sunMaxRows: number = 4;
-  weekdayTranslationKeys: string[] = [
-    'CALENDER.DAYS.SUNDAY',
-    'CALENDER.DAYS.MONDAY',
-    'CALENDER.DAYS.TUESDAY',
-    'CALENDER.DAYS.WEDNESDAY',
-    'CALENDER.DAYS.THURSDAY',
-    'CALENDER.DAYS.FRIDAY',
-    'CALENDER.DAYS.SATURDAY',
-  ];
+  currentLocale: string = 'en-US';
+  calendarHeaderDateFormat: string = 'd MMM';
 
   constructor(
     private readonly weekSchedulerService: WeekSchedulerService,
     private calendarService: CalendarService,
     private snackbar: MatSnackBar,
     private dragDropService: DragSropShareService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
+    this.applyUserSettings(this.authService.userAuthState.settings);
+
     this.registerSubscriptions(() =>
       this.calendarService.calenderWeek$.subscribe((dates) => {
         this.weekDays = [...dates];
@@ -168,6 +165,12 @@ export class WeekCalenderComponent implements OnInit, OnDestroy {
         this.wdMaxRows = 10;
         this.satMaxRows = 4;
         this.sunMaxRows = 4;
+      })
+    );
+
+    this.registerSubscriptions(() =>
+      this.authService.user$.subscribe((authState) => {
+        this.applyUserSettings(authState.settings);
       })
     );
 
@@ -206,5 +209,11 @@ export class WeekCalenderComponent implements OnInit, OnDestroy {
     return date.toDateString() === new Date().toDateString()
       ? ' text-[#5167F4] opacity-40'
       : ' text-black opacity-20';
+  }
+
+  private applyUserSettings(settings: UserSettings) {
+    this.currentLocale = settings.language === 'es' ? 'es-ES' : 'en-US';
+    this.calendarHeaderDateFormat =
+      settings.dateFormat === 'MM-DD' ? 'MMM d' : 'd MMM';
   }
 }

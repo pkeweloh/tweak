@@ -61,7 +61,7 @@ type FormatAction = 'header' | 'bold' | 'list' | 'quote' | 'link';
                 (click)="openDatepicker()"
               >
                 <span>{{ scheduleData.date | date: 'dd.MM.YY' }}</span>
-                <mat-icon>calendar_today</mat-icon>
+                <i class="fa fa-calendar-days" aria-hidden="true"></i>
               </button>
             </ng-container>
             <ng-template #somedayLabel>
@@ -70,12 +70,14 @@ type FormatAction = 'header' | 'bold' | 'list' | 'quote' | 'link';
           </div>
         </div>
         <div class="dialog-header-actions">
-          <div
+          <button
+            type="button"
             (click)="onDelete()"
-            class="delete-btn p-2 rounded hover:bg-gray-200 cursor-pointer transition-colors"
+            class="delete-btn"
+            aria-label="Delete task"
           >
-            <mat-icon style="color: #666;">delete_outline</mat-icon>
-          </div>
+            <i class="fa fa-trash-can" aria-hidden="true"></i>
+          </button>
         </div>
       </div>
 
@@ -222,6 +224,37 @@ type FormatAction = 'header' | 'bold' | 'list' | 'quote' | 'link';
           </button>
         </div>
       </form>
+      <div
+        *ngIf="showDeleteConfirm"
+        class="delete-confirm-backdrop"
+        (click)="cancelDeleteConfirm()"
+      >
+        <div
+          class="delete-confirm-dialog"
+          (click)="$event.stopPropagation()"
+        >
+          <div class="delete-confirm-title">{{ 'COMMON.DELETE_CONFIRM_TITLE' | translate }}</div>
+          <div class="delete-confirm-copy">
+            {{ 'COMMON.DELETE_CONFIRM_MESSAGE' | translate }}
+          </div>
+          <div class="delete-confirm-actions">
+            <button
+              type="button"
+              class="delete-confirm-btn delete-confirm-btn--danger"
+              (click)="confirmDelete()"
+            >
+              {{ 'COMMON.DELETE_CONFIRM_YES' | translate }}
+            </button>
+            <button
+              type="button"
+              class="delete-confirm-btn"
+              (click)="cancelDeleteConfirm()"
+            >
+              {{ 'COMMON.DELETE_CONFIRM_NO' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   `,
   styleUrls: ['./dialoagbox.component.css'],
@@ -234,6 +267,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('linkInputField', { read: ElementRef }) linkInputField?: ElementRef<HTMLInputElement>;
   scheduleData: Schedule;
   colorCode: number = -1;
+  showDeleteConfirm = false;
 
   colors: Array<string> = [];
   formatToolbar: Array<{ action: FormatAction; icon: string }> = [
@@ -380,6 +414,15 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDelete() {
+    this.showDeleteConfirm = true;
+  }
+
+  cancelDeleteConfirm() {
+    this.showDeleteConfirm = false;
+  }
+
+  confirmDelete() {
+    this.showDeleteConfirm = false;
     this.weeklyScheduleService
       .deleteSchedule({ ...this.scheduleData })
       .subscribe((response) => {

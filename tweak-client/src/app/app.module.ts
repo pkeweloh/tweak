@@ -33,6 +33,17 @@ const LANGUAGE_LOCALE_MAP: Record<string, string> = {
 
 function resolveLocaleFromStorage(): string | undefined {
   if (typeof window === 'undefined') return undefined;
+  const storedUser = window.localStorage.getItem('user');
+  if (storedUser) {
+    try {
+      const parsed = JSON.parse(storedUser);
+      const userLang = parsed?.settings?.language;
+      const mappedUserLocale = mapLanguageToLocale(userLang);
+      if (mappedUserLocale) {
+        return mappedUserLocale;
+      }
+    } catch {}
+  }
   const savedLang = window.localStorage.getItem('lang');
   return mapLanguageToLocale(savedLang);
 }

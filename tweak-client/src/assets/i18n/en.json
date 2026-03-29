@@ -1,7 +1,7 @@
 {
   "LOGIN": {
     "TITLE": "Tweak Planner",
-    "SUBTITLE": "Plan your week what we were used to those days👨🏻‍💻.",
+    "SUBTITLE": "Plan your week what we were used to those days. 👨🏻‍💻",
     "USERNAME": "Username",
     "PASSWORD": "Password",
     "BTN_LOGIN": "Login",
@@ -19,6 +19,8 @@
     "SOMETHING_WENT_WRONG": "something went wrong!"
   },
   "HEADER": {
+    "PROFILE": "Profile",
+    "ACCOUNT": "Account",
     "MOVE_UNFINISHED": "Move Unfinished Tasks",
     "LOGOUT": "Log out",
     "ROLLOVER_COMPLETE": "🚀 Rollover complete! Moved {{count}} tasks to today.",
@@ -39,52 +41,6 @@
     "DATE_LABEL": "Date:",
     "ASSIGN_COLOR_LABEL": "Assign Color:",
     "NOTES_PLACEHOLDER": "Add some extra notes here..",
-    "DAYS": {
-      "SUNDAY": "sun",
-      "MONDAY": "mon",
-      "TUESDAY": "tue",
-      "WEDNESDAY": "wed",
-      "THURSDAY": "thu",
-      "FRIDAY": "fri",
-      "SATURDAY": "sat"
-    },
-    "DAYS_SHORT": {
-      "SUNDAY": "S",
-      "MONDAY": "M",
-      "TUESDAY": "T",
-      "WEDNESDAY": "W",
-      "THURSDAY": "T",
-      "FRIDAY": "F",
-      "SATURDAY": "S"
-    },
-    "MONTHS": {
-      "0": "january",
-      "1": "february",
-      "2": "march",
-      "3": "april",
-      "4": "may",
-      "5": "june",
-      "6": "july",
-      "7": "august",
-      "8": "september",
-      "9": "october",
-      "10": "november",
-      "11": "december"
-    },
-    "MONTHS_SHORT": {
-      "0": "jan",
-      "1": "feb",
-      "2": "mar",
-      "3": "apr",
-      "4": "may",
-      "5": "jun",
-      "6": "jul",
-      "7": "aug",
-      "8": "sep",
-      "9": "oct",
-      "10": "nov",
-      "11": "dec"
-    },
     "DATE_PICKER": {
       "OPEN_CALENDAR": "Open calendar",
       "CALENDAR": "Calendar",
@@ -97,12 +53,22 @@
   "COMMON": {
     "DONE": "Done",
     "LANGUAGE": "Language",
+    "WEEK_STARTS_ON": "Week start on",
+    "DATE_FORMAT": "Date format",
+    "MONDAY": "Monday",
+    "SUNDAY": "Sunday",
+    "ENGLISH": "English",
+    "SPANISH": "Spanish",
     "CANCEL": "Cancel",
     "DELETE": "Delete",
     "EDIT": "Edit",
     "SAVE": "Save",
     "YES": "Yes",
     "NO": "No",
-    "UNDO": "Undo"
+    "UNDO": "Undo",
+    "DELETE_CONFIRM_TITLE": "Delete a task?",
+    "DELETE_CONFIRM_MESSAGE": "This action cannot be undone, deleting the task will also result in the loss of the note.",
+    "DELETE_CONFIRM_YES": "Yes, please",
+    "DELETE_CONFIRM_NO": "No way, I'm in"
   }
 }

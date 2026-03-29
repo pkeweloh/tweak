@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DatepickerLocaleService } from './shared/intl/datepicker-locale.service';
+import { AuthService } from './shared/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -12,11 +13,22 @@ export class AppComponent implements OnInit {
 
   constructor(
     private translate: TranslateService,
-    private datepickerLocaleService: DatepickerLocaleService
+    private datepickerLocaleService: DatepickerLocaleService,
+    private authService: AuthService
   ) {
-    const savedLang = localStorage.getItem('lang') || 'en';
-    this.translate.use(savedLang);
+    this.translate.use(this.authService.getInitialLanguage());
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (!this.authService.userAuthState.isAuthenticated) {
+      return;
+    }
+
+    this.authService.fetchCurrentUserSettings().subscribe({
+      next: (user) => {
+        this.translate.use(user.language);
+      },
+      error: () => {},
+    });
+  }
 }

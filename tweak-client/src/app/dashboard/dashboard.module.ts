@@ -8,6 +8,7 @@ import { AuthService } from '../shared/services/auth.service';
 import { CalendarService } from '../shared/services/calendar.service';
 import { WeekSchedulerService } from '../shared/services/week-scheduler.service';
 import { DashboardRoutingModule } from './dashboard-routing.module';
+import { AccountDialogComponent } from './header/account-dialog.component';
 import { DashboardComponent } from './dashboard.component';
 import { HeaderComponent } from './header/header.component';
 import { AddFormComponent } from './week-calender/add-form/add-form.component';
@@ -20,6 +21,7 @@ import { WeekCalenderComponent } from './week-calender/week-calender.component';
   declarations: [
     DashboardComponent,
     HeaderComponent,
+    AccountDialogComponent,
     WeekCalenderComponent,
     AddFormComponent,
     DailyTodoComponent,

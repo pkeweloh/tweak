@@ -1,0 +1,90 @@
+:host {
+  display: block;
+}
+
+.account-dialog {
+  padding: 18px 20px;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
+}
+
+.account-dialog__header {
+  margin-bottom: 18px;
+}
+
+.account-dialog__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.account-dialog__subtitle {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.account-dialog__body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.setting-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.setting-row__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #374151;
+  padding: 0 8px;
+}
+
+.setting-select-wrap {
+  position: relative;
+}
+
+.setting-select {
+  width: 100%;
+  color: #0f0f0f;
+  background: transparent;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  min-height: 42px;
+  padding: 10px 28px 6px 8px;
+  border: none;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.setting-select:focus {
+  outline: none;
+  border-bottom-color: rgba(0, 0, 0, 0.35);
+  box-shadow: none;
+}
+
+.setting-select__icon {
+  position: absolute;
+  right: 8px;
+  bottom: 14px;
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.account-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}

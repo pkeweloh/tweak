@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MondayDateAdapter } from '../shared/intl/monday-date-adapter.service';
+import { WeekStartDateAdapter } from '../shared/intl/week-start-date-adapter.service';
 
 const matModules = [
   MatFormFieldModule,
@@ -38,7 +38,7 @@ const matModules = [
   providers: [
     {
       provide: DateAdapter,
-      useClass: MondayDateAdapter,
+      useClass: WeekStartDateAdapter,
     },
   ],
 })

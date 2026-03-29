@@ -1,7 +1,7 @@
 {
   "LOGIN": {
     "TITLE": "Tweak Planner",
-    "SUBTITLE": "Planea tu semana como solíamos hacerlo esos días👨🏻‍💻.",
+    "SUBTITLE": "Planea tu semana como solíamos hacerlo esos días. 👨🏻‍💻",
     "USERNAME": "Usuario",
     "PASSWORD": "Contraseña",
     "BTN_LOGIN": "Iniciar sesión",
@@ -19,6 +19,8 @@
     "SOMETHING_WENT_WRONG": "¡algo salió mal!"
   },
   "HEADER": {
+    "PROFILE": "Perfil",
+    "ACCOUNT": "Cuenta",
     "MOVE_UNFINISHED": "Mover Tareas Incompletas",
     "LOGOUT": "Cerrar sesión",
     "ROLLOVER_COMPLETE": "🚀 ¡Traspaso completado! Movimos {{count}} tareas a hoy.",
@@ -39,52 +41,6 @@
     "DATE_LABEL": "Fecha:",
     "ASSIGN_COLOR_LABEL": "Asignar Color:",
     "NOTES_PLACEHOLDER": "Añade algunas notas extra aquí...",
-    "DAYS": {
-      "SUNDAY": "dom",
-      "MONDAY": "lun",
-      "TUESDAY": "mar",
-      "WEDNESDAY": "mié",
-      "THURSDAY": "jue",
-      "FRIDAY": "vie",
-      "SATURDAY": "sáb"
-    },
-    "DAYS_SHORT": {
-      "SUNDAY": "D",
-      "MONDAY": "L",
-      "TUESDAY": "M",
-      "WEDNESDAY": "X",
-      "THURSDAY": "J",
-      "FRIDAY": "V",
-      "SATURDAY": "S"
-    },
-    "MONTHS": {
-      "0": "enero",
-      "1": "febrero",
-      "2": "marzo",
-      "3": "abril",
-      "4": "mayo",
-      "5": "junio",
-      "6": "julio",
-      "7": "agosto",
-      "8": "septiembre",
-      "9": "octubre",
-      "10": "noviembre",
-      "11": "diciembre"
-    },
-    "MONTHS_SHORT": {
-      "0": "ene",
-      "1": "feb",
-      "2": "mar",
-      "3": "abr",
-      "4": "may",
-      "5": "jun",
-      "6": "jul",
-      "7": "ago",
-      "8": "sep",
-      "9": "oct",
-      "10": "nov",
-      "11": "dic"
-    },
     "DATE_PICKER": {
       "OPEN_CALENDAR": "Abrir calendario",
       "CALENDAR": "Calendario",
@@ -97,12 +53,22 @@
   "COMMON": {
     "DONE": "Hecho",
     "LANGUAGE": "Idioma",
+    "WEEK_STARTS_ON": "Inicio de la semana",
+    "DATE_FORMAT": "Formato de fecha",
+    "MONDAY": "Lunes",
+    "SUNDAY": "Domingo",
+    "ENGLISH": "Inglés",
+    "SPANISH": "Español",
     "CANCEL": "Cancelar",
     "DELETE": "Eliminar",
     "EDIT": "Editar",
     "SAVE": "Guardar",
     "YES": "Sí",
     "NO": "No",
-    "UNDO": "Deshacer"
+    "UNDO": "Deshacer",
+    "DELETE_CONFIRM_TITLE": "¿Eliminar una tarea?",
+    "DELETE_CONFIRM_MESSAGE": "Esta acción no se puede deshacer, eliminar la tarea también resultará en la pérdida de la nota.",
+    "DELETE_CONFIRM_YES": "Sí, por favor",
+    "DELETE_CONFIRM_NO": "No, me quedo"
   }
 }

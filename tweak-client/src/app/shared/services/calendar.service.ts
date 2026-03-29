@@ -15,16 +15,14 @@ export class CalendarService {
   private weekStartDate: Date;
   private weekEndDate: Date;
 
-  private readonly MONTHS_MAPPING = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
-  ];
-
   private monthWithYearSubject: BehaviorSubject<{ month: number, year: number }>;
   public monthWithYear$: Observable<{ month: number, year: number }>;
 
   private calendarWeekSubject: BehaviorSubject<Array<Date>>;
   public calenderWeek$: Observable<Array<Date>>;
+
+  private isCurrentWeekSubject: BehaviorSubject<boolean>;
+  public isCurrentWeek$: Observable<boolean>;
 
   constructor() {
     this.currentWeekStartDate = this.getMonday(new Date());
@@ -38,6 +36,11 @@ export class CalendarService {
 
     this.monthWithYearSubject = new BehaviorSubject(this.getCurrentMonthAndYear());
     this.monthWithYear$ = this.monthWithYearSubject.asObservable();
+
+    this.isCurrentWeekSubject = new BehaviorSubject(
+      this.isSameWeekStart(this.weekStartDate, this.currentWeekStartDate)
+    );
+    this.isCurrentWeek$ = this.isCurrentWeekSubject.asObservable();
   }
 
   public generateWeekDates(type: WeekGenerationType) {
@@ -52,6 +55,9 @@ export class CalendarService {
     this.weekEndDate = this.addDays(this.weekStartDate, 6);
     this.calendarWeekSubject.next(this.generateWeek(this.weekStartDate));
     this.monthWithYearSubject.next(this.getCurrentMonthAndYear());
+    this.isCurrentWeekSubject.next(
+      this.isSameWeekStart(this.weekStartDate, this.currentWeekStartDate)
+    );
   }
 
   // --- Helper Methods ---
@@ -84,5 +90,9 @@ export class CalendarService {
       month: this.weekStartDate.getMonth(),
       year: this.weekStartDate.getFullYear()
     };
+  }
+
+  private isSameWeekStart(left: Date, right: Date): boolean {
+    return left.toDateString() === right.toDateString();
   }
 }

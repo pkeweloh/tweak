@@ -1,6 +1,7 @@
 .m-5 {
   margin: 1.25rem;
 }
+
 .m-20 {
   margin: 5rem;
 }
@@ -11,14 +12,160 @@
 }
 
 .text-decor {
-  color: blue;
+  color: var(--tweek-accent-primary);
   font-weight: 500;
-  border-bottom: 1px solid black;
-  border-color: blue;
+  border-bottom: 1px solid var(--tweek-accent-primary);
   cursor: pointer;
 }
 
 .bg-image {
   background: url("src/assets/auth-screen.svg");
-  /* display: table; */
+}
+
+/* Custom form field styling */
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-underline {
+  display: none !important;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-infix {
+  padding: 0 !important;
+  border: none !important;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-wrapper {
+  margin-bottom: 0 !important;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-subscript-wrapper {
+  padding: 0 !important;
+  margin-top: 4px !important;
+}
+
+/* Input styling */
+::ng-deep .mat-input-element {
+  color: #0f0f0f !important;
+  background: transparent !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  min-height: 42px !important;
+  padding: 10px 0 6px 0 !important;
+  border: none !important;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.25) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
+}
+
+/* Remove autofill background */
+::ng-deep .mat-input-element:-webkit-autofill,
+::ng-deep .mat-input-element:-webkit-autofill:hover,
+::ng-deep .mat-input-element:-webkit-autofill:focus,
+::ng-deep .mat-input-element:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #0f0f0f !important;
+  background-color: white !important;
+  background-image: none !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+/* Alternative autofill fix for different browsers */
+::ng-deep input:-webkit-autofill,
+::ng-deep input:-webkit-autofill:hover,
+::ng-deep input:-webkit-autofill:focus,
+::ng-deep input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #0f0f0f;
+  background-color: white;
+  background-image: none;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+::ng-deep .mat-input-element:focus {
+  outline: none;
+  border-bottom-color: rgba(0, 0, 0, 0.35);
+  box-shadow: none;
+}
+
+/* Label styling */
+::ng-deep .mat-form-field-label {
+  color: #374151;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transform: translateY(-8px);
+}
+
+::ng-deep .mat-form-field-label.mat-form-field-empty {
+  transform: translateY(0);
+}
+
+::ng-deep .mat-focused .mat-form-field-required-marker,
+::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-label.mat-accent, 
+::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-label .mat-form-field-required-marker {
+  color: #df535f;
+}
+
+::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-label {
+  color: inherit;
+}
+
+/* Error message styling */
+::ng-deep .mat-error {
+  color: #df535f;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0 8px;
+  margin-top: 4px;
+}
+
+/* Button styling */
+::ng-deep .mat-raised-button.mat-primary {
+  background-color: var(--tweek-accent-primary);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0 32px;
+  border-radius: 9999px ;
+  text-transform: none;
+  box-shadow: none ;
+  transition: background-color 0.15s ease;
+}
+
+::ng-deep .mat-flat-button.mat-accent, ::ng-deep .mat-raised-button.mat-accent,
+::ng-deep .mat-fab.mat-accent, ::ng-deep .mat-mini-fab.mat-accent {
+  background-color: #df535f;
+}
+
+::ng-deep .mat-raised-button.mat-primary:hover {
+  background-color: #4157d9;
+}
+
+::ng-deep .mat-stroked-button {
+  border: none;
+  background: transparent;
+  color: var(--tweek-accent-primary);
+  font-weight: 600;
+  padding: 0;
+  text-transform: none ;
+}
+
+::ng-deep .mat-stroked-button:hover {
+  background: transparent;
+  color: #4157d9;
+}
+
+/* Form container styling */
+.login-form {
+  padding: 0 8px;
+}
+
+
+/* Focus indicator styling */
+::ng-deep .mat-form-field-focus-overlay {
+  display: none;
 }

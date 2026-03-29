@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import {
@@ -8,14 +9,27 @@ import {
 import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
+import { AccountDialogComponent } from './account-dialog.component';
 
 @Component({
   selector: 'app-header',
   template: `
     <div class="header-container">
-      <div class="month-year" *ngIf="monthWithYear$ | async as data">
-        {{ 'CALENDER.MONTHS.' + data.month | translate }} {{ data.year }}
-      </div>
+      <ng-container *ngIf="monthWithYear$ | async as data">
+        <button
+          *ngIf="(isCurrentWeek$ | async) === false; else currentWeekLabel"
+          type="button"
+          class="month-year month-year--link"
+          (click)="goToCurrentWeek()"
+        >
+          {{ formatMonthYear(data.month, data.year) }}
+        </button>
+        <ng-template #currentWeekLabel>
+          <div class="month-year">
+            {{ formatMonthYear(data.month, data.year) }}
+          </div>
+        </ng-template>
+      </ng-container>
 
       <div class="action-buttons">
         <div class="button-group-main">
@@ -23,16 +37,22 @@ import { TranslateService } from '@ngx-translate/core';
           <button 
             class="circle-btn btn-profile" 
             [matMenuTriggerFor]="profileMenu"
-            matTooltip="Profile"
+            [matTooltip]="'HEADER.PROFILE' | translate"
           >
             <mat-icon>person</mat-icon>
           </button>
           <mat-menu #profileMenu="matMenu" panelClass="custom-menu-panel">
             <div class="px-4 py-2 text-sm font-bold border-b">@{{ currentUsername }}</div>
+            <button mat-menu-item (click)="openAccountDialog()">
+              <div class="flex items-center w-full">
+                <i class="fa fa-user-cog menu-item-icon" aria-hidden="true"></i>
+                <span>{{ 'HEADER.ACCOUNT' | translate }}</span>
+              </div>
+            </button>
             <button mat-menu-item (click)="onLogout()">
-              <div class="flex items-center justify-between w-full">
+              <div class="flex items-center w-full">
+                <i class="fa fa-door-open menu-item-icon" aria-hidden="true"></i>
                 <span>{{ 'HEADER.LOGOUT' | translate }}</span>
-                <mat-icon class="ml-auto" style="margin-right: 0;">exit_to_app</mat-icon>
               </div>
             </button>
           </mat-menu>
@@ -46,17 +66,16 @@ import { TranslateService } from '@ngx-translate/core';
           </button>
           <mat-menu #optionsMenu="matMenu" panelClass="custom-menu-panel">
             <button mat-menu-item (click)="onRollover()">
-              <div class="flex items-center justify-between w-full">
+              <div class="flex items-center w-full">
+                <i class="fa fa-rotate-right menu-item-icon" aria-hidden="true"></i>
                 <span>{{ 'HEADER.MOVE_UNFINISHED' | translate }}</span>
-                <mat-icon class="ml-auto" style="margin-right: 0;">autorenew</mat-icon>
               </div>
             </button>
             <div class="menu-separator"></div>
             <button mat-menu-item [matMenuTriggerFor]="langSubMenu">
               <div class="flex items-center w-full">
-                <mat-icon>language</mat-icon>
+                <i class="fa fa-language menu-item-icon" aria-hidden="true"></i>
                 <span>{{ 'COMMON.LANGUAGE' | translate }}</span>
-                <span class="ml-auto text-xs opacity-50">{{ translate.currentLang | uppercase }}</span>
               </div>
             </button>
           </mat-menu>
@@ -84,6 +103,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class HeaderComponent implements OnInit {
   currentUsername: string = 'sounish';
   monthWithYear$: Observable<{ month: number, year: number }>;
+  isCurrentWeek$: Observable<boolean>;
 
   /**
    *
@@ -108,6 +128,11 @@ export class HeaderComponent implements OnInit {
     return type === 'prev' ? this.onPreviousClicked() : this.onNextClicked();
   }
 
+  goToCurrentWeek() {
+    this.calendarService.generateWeekDates(WeekGenerationType.CURRENT);
+    this.weekSchedulerService.refreshState();
+  }
+
   /**
    *
    * @param calendarService
@@ -117,20 +142,30 @@ export class HeaderComponent implements OnInit {
     private readonly calendarService: CalendarService,
     private readonly weekSchedulerService: WeekSchedulerService,
     private snackbar: MatSnackBar,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private dialog: MatDialog
   ) {
     this.currentUsername = this.authService.userAuthState.username;
     this.monthWithYear$ = this.calendarService.monthWithYear$;
+    this.isCurrentWeek$ = this.calendarService.isCurrentWeek$;
   }
 
   ngOnInit(): void { }
 
   useLanguage(language: string) {
-    localStorage.setItem('lang', language);
-    // this.translate.use(language);
-    if (typeof window !== 'undefined') {
-      window.location.reload();
-    }
+    this.authService.updateSettings({ language: language as 'en' | 'es' }).subscribe({
+      next: () => {
+        this.translate.use(language);
+      },
+    });
+  }
+
+  openAccountDialog() {
+    this.dialog.open(AccountDialogComponent, {
+      width: '360px',
+      autoFocus: false,
+      panelClass: 'dialog-panel',
+    });
   }
 
   onLogout() {
@@ -149,5 +184,16 @@ export class HeaderComponent implements OnInit {
         });
       });
     });
+  }
+
+  formatMonthYear(month: number, year: number) {
+    const locale =
+      this.authService.userAuthState.settings.language === 'es' ? 'es-ES' : 'en-US';
+
+    const monthLabel = new Intl.DateTimeFormat(locale, {
+      month: 'long',
+    }).format(new Date(year, month, 1));
+
+    return `${monthLabel} ${year}`;
   }
 }

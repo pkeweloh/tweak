@@ -1,9 +1,9 @@
 :host {
   display: block;
-  background-color: #ffffff;
 }
 
 .dialog-container {
+  position: relative;
   padding: 18px 20px;
   background: #ffffff;
   border: 1px solid #e5e5e5;
@@ -15,6 +15,103 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
+}
+
+.delete-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: #666666;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  padding: 0;
+}
+
+.delete-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #111827;
+}
+
+.delete-btn:focus,
+.delete-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.delete-btn i {
+  font-size: 15px;
+}
+
+.delete-confirm-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 30;
+}
+
+.delete-confirm-dialog {
+  width: min(100%, 360px);
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+  padding: 18px 18px 16px;
+}
+
+.delete-confirm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.delete-confirm-copy {
+  margin-top: 8px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #4b5563;
+}
+
+.delete-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.delete-confirm-btn {
+  border: none;
+  border-radius: 9999px;
+  background: #f3f4f6;
+  color: #111827;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.delete-confirm-btn:hover {
+  background: #e5e7eb;
+}
+
+.delete-confirm-btn--danger {
+  background: #df535f;
+  color: #ffffff;
+}
+
+.delete-confirm-btn--danger:hover {
+  background: #df535f;
 }
 
 .todo-input {
@@ -64,7 +161,7 @@
 
 .date-button {
   display: inline-flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 2px;
   border: none;
   background: none;
@@ -79,9 +176,10 @@
   outline: none;
 }
 
-.date-button mat-icon {
-  font-size: 18px;
+.date-button i {
+  font-size: 15px;
   opacity: 0.6;
+  line-height: 1;
 }
 
 .hidden-datepicker {

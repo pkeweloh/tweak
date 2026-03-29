@@ -1,5 +1,3 @@
-@import '@fortawesome/fontawesome-free/css/all.min.css';
-
 /* SuisseIntl Font - Book (Regular) Weight */
 @font-face {
   font-family: "SuisseIntl";
@@ -144,6 +142,7 @@ body {
 }
 
 /* Consolidated Absolute Global Menu Styling */
+
 .mat-mdc-menu-panel,
 .mat-menu-panel,
 .mat-mdc-menu-content,
@@ -190,6 +189,17 @@ body {
   height: 18px !important;
 }
 
+.custom-menu-panel .menu-item-icon,
+.mat-mdc-menu-item .menu-item-icon,
+.mat-menu-item .menu-item-icon {
+  color: #000000 !important;
+  margin-right: 12px !important;
+  font-size: 16px !important;
+  width: 18px !important;
+  text-align: center !important;
+  flex: 0 0 18px !important;
+}
+
 .menu-separator {
   height: 1px;
   background-color: #0000001a;
@@ -207,16 +217,24 @@ body {
   font-family: 'SuisseIntl', 'Inter', sans-serif !important;
 }
 
-/* Light Dialog Styling */
-.light-dialog-panel .mat-dialog-container,
-.light-dialog-panel .mat-mdc-dialog-container,
-.light-dialog-panel .mdc-dialog__surface {
-  background-color: #f2f2f7 !important;
-  background: #f2f2f7 !important;
-  border-radius: 4px !important;
-  /* Maintaining square look */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+/* Custom Button Styling */
+.mat-flat-button.mat-primary,
+.mat-raised-button.mat-primary,
+.mat-fab.mat-primary,
+.mat-mini-fab.mat-primary {
+  background-color: var(--tweek-accent-primary);
+}
+
+.mat-input-element {
+  caret-color: var(--tweek-accent-primary);
+}
+
+/* Dialog Styling */
+.dialog-panel .mat-dialog-container,
+.dialog-panel .mat-mdc-dialog-container,
+.dialog-panel .mdc-dialog__surface {
+  background: transparent !important;
+  box-shadow: none !important;
   padding: 0 !important;
-  overflow: hidden !important;
-  color: #000000 !important;
+  overflow: visible !important;
 }

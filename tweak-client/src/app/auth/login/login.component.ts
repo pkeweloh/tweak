@@ -23,8 +23,8 @@ import { AuthService } from 'src/app/shared/services/auth.service';
       <form
         [formGroup]="form"
         fxLayout="column"
-        fxLayoutGap="30px"
-        class="w-600"
+        fxLayoutGap="20px"
+        class="w-600 login-form"
       >
         <mat-form-field appearance="fill">
           <mat-label> {{ 'LOGIN.USERNAME' | translate }} </mat-label>
@@ -40,7 +40,6 @@ import { AuthService } from 'src/app/shared/services/auth.service';
             <span [innerHTML]="'LOGIN.USERNAME_REQUIRED_2' | translate"></span>
           </mat-error>
           <input
-            placeholder="sounishnath003"
             formControlName="username"
             matInput
             type="text"
@@ -58,10 +57,9 @@ import { AuthService } from 'src/app/shared/services/auth.service';
             {{ 'LOGIN.PASSWORD_REQUIRED_1' | translate }}
           </mat-error>
           <mat-error *ngIf="passwordField?.hasError('required')">
-             <span [innerHTML]="'LOGIN.PASSWORD_REQUIRED_2' | translate"></span>
+              <span [innerHTML]="'LOGIN.PASSWORD_REQUIRED_2' | translate"></span>
           </mat-error>
           <input
-            placeholder="*** **** ***"
             formControlName="password"
             matInput
             type="password"
@@ -75,35 +73,34 @@ import { AuthService } from 'src/app/shared/services/auth.service';
             </li>
           </ul>
         </div>
-
-        <button
-          [disabled]="form.invalid"
-          mat-flat-button
-          [color]="isSignup ? 'accent' : 'primary'"
-          (click)="isSignup ? onSignup() : onSignin()"
+        <div class="flex justify-end">
+          <button
+            [disabled]="form.invalid"
+            mat-flat-button
+            [color]="isSignup ? 'accent' : 'primary'"
+            (click)="isSignup ? onSignup() : onSignin()"
+          >
+            {{ (isSignup ? 'LOGIN.BTN_SIGNUP' : 'LOGIN.BTN_LOGIN') | translate }} &rarr;
+          </button>
+        </div>
+        <div
+          fxLayout="row"
+          fxLayoutAlign="end center"
+          fxLayoutGap="20px"
         >
-          {{ (isSignup ? 'LOGIN.BTN_SIGNUP' : 'LOGIN.BTN_LOGIN') | translate }} &rarr;
-        </button>
+          <div (click)="isSignup = !isSignup">
+            {{ (isSignup ? 'LOGIN.ALREADY_HAVE' : 'LOGIN.DO_NOT_HAVE') | translate }}
+            <span class="text-decor">
+              {{ (isSignup ? 'LOGIN.BTN_LOGIN' : 'LOGIN.BTN_SIGNUP') | translate }}
+            </span>
+          </div>
+          <div style="display: none">|</div>
+          <div style="display: none">
+            {{ 'LOGIN.FORGOT_PASSWORD' | translate }}
+            <span class="text-decor">{{ 'LOGIN.RESET_PASSWORD' | translate }}</span>
+          </div>
+        </div>
       </form>
-
-      <div
-        fxLayout="row"
-        fxLayoutAlign="space-around center"
-        class="m-5"
-        fxLayoutGap="20px"
-      >
-        <div (click)="isSignup = !isSignup">
-          {{ (isSignup ? 'LOGIN.ALREADY_HAVE' : 'LOGIN.DO_NOT_HAVE') | translate }}
-          <span class="text-decor">
-            {{ (isSignup ? 'LOGIN.BTN_LOGIN' : 'LOGIN.BTN_SIGNUP') | translate }}
-          </span>
-        </div>
-        <div>|</div>
-        <div>
-          {{ 'LOGIN.FORGOT_PASSWORD' | translate }}
-          <span style="color: red; cursor: pointer;">{{ 'LOGIN.RESET_PASSWORD' | translate }}</span>
-        </div>
-      </div>
     </div>
   `,
   styleUrls: ['./login.component.css'],
@@ -144,13 +141,12 @@ export class LoginComponent implements OnInit {
     const { username, password } = this.form.value;
     this.authService.signupWithUsernamePassword(username, password).subscribe({
       next: (response) => {
-        this.form.reset();
-        window.location.replace('/');
         this.translate.get('LOGIN.APP_STATE_REINIT').subscribe((res: string) => {
           this.snackbar.open(res, this.translate.instant('COMMON.DONE'), {
             duration: 3000,
           });
         });
+        window.location.replace('/');
       },
       error: (error) => {
         const e = error.message;
@@ -172,13 +168,12 @@ export class LoginComponent implements OnInit {
     this.authService.signinWithUsernamePassword(username, password).subscribe({
       next: (response) => {
         const { redirectTo } = this.route.snapshot.queryParams;
-        this.form.reset();
-        window.location.replace(redirectTo || '/');
         this.translate.get('LOGIN.YOU_ARE_LOGGED_IN').subscribe((res: string) => {
           this.snackbar.open(res, this.translate.instant('COMMON.DONE'), {
             duration: 3000,
           });
         });
+        window.location.replace(redirectTo || '/');
       },
       error: (error) => {
         const e = error.message;
