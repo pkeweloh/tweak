@@ -11,7 +11,7 @@ import { DragSropShareService } from './drag-share.service';
 @Component({
   selector: 'app-week-calender',
   template: `
-    <div class="px-5 pt-12 overflow-x-auto overflow-y-hidden">
+    <div class="px-6 pt-12 pb-1 overflow-x-auto overflow-y-hidden">
       <div class="grid-6-col" cdkDropListGroup>
         <!-- Weekdays (Mon-Fri) -->
         <div
@@ -20,12 +20,12 @@ import { DragSropShareService } from './drag-share.service';
         >
           <div
             [class]="
-              'flex flex-row items-baseline border-b-2 h-[45px] px-1 box-border' +
+              'flex flex-row items-baseline border-b-2 h-[42px] box-border' +
               setTodaysColor(date)
             "
-              style="letter-spacing: -0.5px;"
+              style="padding-bottom: 12px; display: flex; line-height: 28px;"
           >
-            <div class="font-bold text-[21px]">
+            <div class="font-bold text-[21px]" style="letter-spacing: -0.5px;">
               {{ date | date: calendarHeaderDateFormat : undefined : currentLocale }}
             </div>
             <div class="flex-1"></div>
@@ -42,18 +42,18 @@ import { DragSropShareService } from './drag-share.service';
         </div>
 
         <!-- Weekend (Sat & Sun) -->
-        <div class="flex flex-col h-full gap-[45px]">
+        <div class="flex flex-col h-full gap-[42px]">
           <!-- Saturday -->
           <ng-container *ngIf="weekDays[5] as date">
             <div class="flex-none overflow-hidden">
               <div
                 [class]="
-                  'flex flex-row items-baseline border-b-2 h-[45px] px-1 box-border' +
+                  'flex flex-row items-baseline border-b-2 h-[42px] box-border' +
                   setTodaysColor(date)
                 "
-                style="letter-spacing: -0.5px;"
+                style="padding-bottom: 12px; display: flex; line-height: 28px;"
               >
-                <div class="font-bold text-[21px]">
+                <div class="font-bold text-[21px]" style="letter-spacing: -0.5px;">
                   {{ date | date: calendarHeaderDateFormat : undefined : currentLocale }}
                 </div>
                 <div class="flex-1"></div>
@@ -75,12 +75,12 @@ import { DragSropShareService } from './drag-share.service';
             <div class="flex-1 flex flex-col h-full">
               <div
                 [class]="
-                  'flex flex-row items-baseline border-b-2 h-[45px] px-1 box-border' +
+                  'flex flex-row items-baseline border-b-2 h-[42px] box-border' +
                   setTodaysColor(date)
                 "
-                style="letter-spacing: -0.5px;"
+                style="padding-bottom: 12px; display: flex; line-height: 28px;"
               >
-                <div class="font-bold text-[21px]">
+                <div class="font-bold text-[21px]" style="letter-spacing: -0.5px;">
                   {{ date | date: calendarHeaderDateFormat : undefined : currentLocale }}
                 </div>
                 <div class="flex-1"></div>
@@ -101,8 +101,8 @@ import { DragSropShareService } from './drag-share.service';
       </div>
 
       <!-- Someday Section Separator Block -->
-      <div class="w-full bg-white relative z-10 pt-8 pb-4 mt-4 px-1">
-        <span class="font-bold text-black opacity-20 tracking-wide" style="font-family: 'SuisseIntl'; font-size: 20px;">{{ 'CALENDER.SOMEDAY' | translate }}</span>
+      <div class="w-full bg-white relative pt-6 pb-3 mt-4" style="padding-top: 1.63rem; padding-bottom: 0.68rem;">
+        <span class="font-bold text-black opacity-20 tracking-wide" style="font-family: 'SuisseIntl'; font-size: 21px; letter-spacing: -.5px;">{{ 'CALENDER.SOMEDAY' | translate }}</span>
       </div>
       
       <div class="grid-6-col" cdkDropListGroup>
@@ -115,7 +115,7 @@ import { DragSropShareService } from './drag-share.service';
               [listId]="somedayId"
               [generatedIds]="generatedIds"
               [connectedIndex]="10 + i"
-              [maxRows]="10"
+              [maxRows]="1"
             ></app-daily-todo>
           </div>
         </ng-container>
@@ -175,12 +175,6 @@ export class WeekCalenderComponent implements OnInit, OnDestroy {
     );
 
     this.weekSchedulerService.refreshState();
-    this.translate.get('CALENDER.APPSTATE_REFRESHED').subscribe((res: string) => {
-      this.snackbar.open(res, this.translate.instant('COMMON.DONE'), {
-        duration: 3000,
-        panelClass: ['bg-[#5167F4]', 'text-white'],
-      });
-    });
   }
 
   ngOnDestroy() {
@@ -202,7 +196,7 @@ export class WeekCalenderComponent implements OnInit, OnDestroy {
   setTodaysColor(date: Date) {
     return date.toDateString() === new Date().toDateString()
       ? ' text-[#5167F4] border-[#5167F4]'
-      : ' text-gray-800 border-black';
+      : ' text-black-800 border-black';
   }
 
   setTodaysColorByOpacity(date: Date) {

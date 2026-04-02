@@ -33,8 +33,6 @@
     "IS_PRIORITY": "¿Es Prioridad?",
     "ADD_TODO": "Añadir Tarea",
     "DELETE_BTN": "Eliminar",
-    "APPSTATE_REFRESHED": "Estado de la aplicación actualizado",
-    "NEW_SCHEDULE_CREATED": "¡Se ha creado una nueva tarea!",
     "SCHEDULE_DELETED": "La tarea ha sido eliminada.",
     "SCHEDULE_RESTORED": "La tarea ha sido restaurada.",
     "TODO_LABEL": "Tu Tarea",
@@ -51,7 +49,7 @@
     }
   },
   "COMMON": {
-    "DONE": "Hecho",
+    "OK": "Aceptar",
     "LANGUAGE": "Idioma",
     "WEEK_STARTS_ON": "Inicio de la semana",
     "DATE_FORMAT": "Formato de fecha",

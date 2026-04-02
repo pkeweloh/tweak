@@ -21,26 +21,13 @@ import { Schedule } from 'src/app/shared/utils/types.utils';
           aria-autocomplete="none"
           type="text"
           (blur)="onSubmit()"
-          class="outline-none border-none h-full px-3 text-sm font-medium w-full bg-transparent text-gray-800"
+          class="outline-none border-none h-full text-sm font-medium w-full bg-transparent text-black-800 relative z-10"
           placeholder=""
         />
       </div>
     </form>
   `,
-  styles: [`
-    .input-wrapper:focus-within::before {
-      content: "";
-      position: absolute;
-      top: -2px;
-      right: -8px;
-      left: -8px;
-      bottom: -2px;
-      border-radius: 4px;
-      box-shadow: 0 1px 4px 1px #0000001c;
-      background-color: var(--input-active--background);
-      pointer-events: none;
-    }
-  `],
+  styleUrls: ['./add-form.component.css'],
 })
 export class AddFormComponent implements OnInit {
   @Input() date!: Date;
@@ -82,9 +69,6 @@ export class AddFormComponent implements OnInit {
       .createSchedule(formData)
       .subscribe({
         next: (response) => {
-          this.translate.get('CALENDER.NEW_SCHEDULE_CREATED').subscribe((res: string) => {
-            this.snackbar.open(res, this.translate.instant('COMMON.CANCEL'), { duration: 3000 });
-          });
           this.isSubmitting = false;
         },
         error: (err) => {

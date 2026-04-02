@@ -33,8 +33,6 @@
     "IS_PRIORITY": "Is Priority?",
     "ADD_TODO": "Add Todo",
     "DELETE_BTN": "Delete",
-    "APPSTATE_REFRESHED": "Appstate Refreshed",
-    "NEW_SCHEDULE_CREATED": "New schedule has been created!",
     "SCHEDULE_DELETED": "Schedule has been deleted.",
     "SCHEDULE_RESTORED": "Schedule has been restored.",
     "TODO_LABEL": "Your Todo",
@@ -51,7 +49,7 @@
     }
   },
   "COMMON": {
-    "DONE": "Done",
+    "OK": "OK",
     "LANGUAGE": "Language",
     "WEEK_STARTS_ON": "Week start on",
     "DATE_FORMAT": "Date format",

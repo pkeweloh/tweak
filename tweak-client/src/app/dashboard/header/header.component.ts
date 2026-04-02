@@ -156,6 +156,7 @@ export class HeaderComponent implements OnInit {
     this.authService.updateSettings({ language: language as 'en' | 'es' }).subscribe({
       next: () => {
         this.translate.use(language);
+        window.location.reload();
       },
     });
   }
@@ -178,10 +179,7 @@ export class HeaderComponent implements OnInit {
       
       const translationKey = count > 0 ? 'HEADER.ROLLOVER_COMPLETE' : 'HEADER.NO_UNFINISHED';
       this.translate.get(translationKey, { count }).subscribe((message: string) => {
-        this.snackbar.open(message, this.translate.instant('COMMON.DONE'), {
-          duration: 3000,
-          panelClass: ['bg-[#5167F4]', 'text-white'],
-        });
+        this.snackbar.open(message, this.translate.instant('COMMON.OK'), { duration: 3000 });
       });
     });
   }

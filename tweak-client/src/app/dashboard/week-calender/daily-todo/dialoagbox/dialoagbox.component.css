@@ -90,7 +90,7 @@
 
 .delete-confirm-btn {
   border: none;
-  border-radius: 9999px;
+  border-radius: 4px;
   background: #f3f4f6;
   color: #111827;
   font: inherit;
@@ -545,19 +545,4 @@
 
 .link-input:focus {
   outline: none;
-}
-
-.task-note-indicator {
-  margin-right: 6px;
-  padding: 0;
-  background: transparent;
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.task-note-indicator i {
-  font-size: 14px;
-  color: #5167f4;
 }

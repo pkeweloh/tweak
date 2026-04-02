@@ -113,11 +113,15 @@ export class AccountDialogComponent {
 
     this.saving = true;
     const settings = this.form.getRawValue() as UserSettings;
+    const languageChanged = settings.language !== this.translate.currentLang;
 
     this.authService.updateSettings(settings).subscribe({
       next: () => {
         this.translate.use(settings.language);
         this.dialogRef.close(settings);
+        if (languageChanged) {
+          window.location.reload();
+        }
       },
       error: () => {
         this.saving = false;

@@ -1,0 +1,8 @@
+.input-wrapper:focus-within::before {
+  content: "";
+  position: absolute;
+  inset: -2px -8px;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px 1px rgba(0, 0, 0, 0.11);
+  pointer-events: none;
+}

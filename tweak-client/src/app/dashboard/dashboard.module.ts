@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaterialModule } from '../material/material.module';
-import { OnDoubleClickDirective } from '../shared/directives/on-double-click.directive';
 import { AuthService } from '../shared/services/auth.service';
 import { CalendarService } from '../shared/services/calendar.service';
 import { WeekSchedulerService } from '../shared/services/week-scheduler.service';
@@ -25,7 +24,6 @@ import { WeekCalenderComponent } from './week-calender/week-calender.component';
     WeekCalenderComponent,
     AddFormComponent,
     DailyTodoComponent,
-    OnDoubleClickDirective,
     DialoagboxComponent,
   ],
   imports: [

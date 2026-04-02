@@ -25,7 +25,7 @@ import { DialoagboxComponent } from './dialoagbox/dialoagbox.component';
           *ngFor="let work of works; let idx = index; trackBy: trackById"
           cdkDrag
           [cdkDragData]="work"
-          class="schedule-div w-full flex items-center px-1 cursor-grab active:cursor-grabbing relative h-[45px] hover:border-[#5167F4] border-b border-transparent transition-colors duration-100 pr-7"
+          class="schedule-div w-full flex items-center cursor-grab active:cursor-grabbing relative h-[42px] hover:border-[#5167F4] border-b border-transparent transition-colors duration-100 pr-[35px]"
           [class.opacity-0]="draggedIndex === idx"
           (cdkDragStarted)="onDragStart(idx)"
           (cdkDragEnded)="onDragEnd()"
@@ -35,12 +35,15 @@ import { DialoagboxComponent } from './dialoagbox/dialoagbox.component';
             <div class="drag-preview-content flex items-center">
               <div class="flex-1 min-w-0 flex items-center">
                 <div
-                  class="outline-none border-none rounded-xl truncate inline-block px-1.5 max-w-full"
+                  class="outline-none border-none rounded-xl inline-flex items-center min-w-0 max-w-full"
                   [ngClass]="getColor(work.colorCode)"
                   [class.opacity-30]="work.finished"
                   [class.line-through]="work.finished"
                 >
-                  {{ work.todo }}
+                  <span class="task-note-indicator inline-block min-w-0 max-w-full">
+                    <i *ngIf="work.notes" class="fa-regular fa-sticky-note task-note-icon" aria-hidden="true"></i>
+                    {{ work.todo }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -50,18 +53,13 @@ import { DialoagboxComponent } from './dialoagbox/dialoagbox.component';
 
           <div class="flex-1 min-w-0 flex items-center gap-2">
             <div
-              class="outline-none border-none rounded-xl inline-flex items-center min-w-0 px-1.5 max-w-full"
+              class="outline-none border-none rounded-xl inline-flex items-center min-w-0 max-w-full"
               [ngClass]="getColor(work.colorCode)"
               [class.opacity-30]="work.finished"
               [class.line-through]="work.finished"
             >
-              <div
-                *ngIf="work.notes"
-                class="task-note-indicator"
-              >
-                <i class="fa fa-sticky-note" aria-hidden="true"></i>
-              </div>
-              <span class="truncate inline-block min-w-0 max-w-full">
+              <span class="task-note-indicator inline-block min-w-0 max-w-full">
+                <i *ngIf="work.notes" class="fa-regular fa-sticky-note task-note-icon" aria-hidden="true"></i>
                 {{ work.todo }}
               </span>
             </div>
@@ -76,7 +74,7 @@ import { DialoagboxComponent } from './dialoagbox/dialoagbox.component';
           </div>
         </div>
 
-        <div class="h-[45px] max-h-[45px] overflow-hidden w-full flex items-center text-gray-300 italic text-sm px-1 hover:border-[#5167F4] border-b border-transparent">
+        <div class="h-[42px] max-h-[42px] overflow-visible w-full flex items-center italic text-sm hover:border-[#5167F4] border-b border-transparent">
           <app-add-form
             [date]="date"
             [isSomeday]="isSomedayValue"
@@ -226,7 +224,7 @@ export class DailyTodoComponent implements OnInit, OnDestroy {
     return `ID@${this.listId || (this.date as Date).toDateString()}`;
   }
 
-  trackById(index: number, item: Schedule) {
+  trackById(_index: number, item: Schedule) {
     return item._id;
   }
 }

@@ -53,7 +53,7 @@ type FormatAction = 'header' | 'bold' | 'list' | 'quote' | 'link';
               ></button>
             </div>
           </div>
-          <div class="text-xl font-bold text-gray-800">
+          <div class="text-xl font-bold text-black-800">
             <ng-container *ngIf="!isSomedayTask; else somedayLabel">
               <button
                 type="button"
@@ -414,7 +414,11 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDelete() {
-    this.showDeleteConfirm = true;
+    if (this.scheduleData.notes) {
+      this.showDeleteConfirm = true;
+    } else {
+      this.confirmDelete();
+    }
   }
 
   cancelDeleteConfirm() {
@@ -431,8 +435,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
         this.translate.get('CALENDER.SCHEDULE_DELETED').subscribe((message: string) => {
           const snackbarRef: MatSnackBarRef<TextOnlySnackBar> =
             this.snackbar.open(message, this.translate.instant('COMMON.UNDO'), {
-              duration: 5000,
-              panelClass: ['bg-red-600', 'text-white'],
+              duration: 6000
             });
 
           snackbarRef.onAction().subscribe(() => {
@@ -443,10 +446,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
               })
               .subscribe((response) => {
                 this.translate.get('CALENDER.SCHEDULE_RESTORED').subscribe((restoredMsg: string) => {
-                  this.snackbar.open(restoredMsg, this.translate.instant('COMMON.DONE'), {
-                    duration: 3000,
-                    panelClass: ['bg-green-600', 'text-white'],
-                  });
+                  this.snackbar.open(restoredMsg, this.translate.instant('COMMON.OK'), { duration: 3000 });
                 });
               });
           });

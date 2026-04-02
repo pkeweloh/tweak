@@ -16,7 +16,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
     <div class="m-20" fxLayout="column" fxLayoutAlign="start center">
       <div fxLayout="column" fxLayoutAlign="start center" class="my-6">
         <h1 class="text-5xl font-bold my-2 text-black">{{ 'LOGIN.TITLE' | translate }}</h1>
-        <div class="body-font text-gray-800">
+        <div class="body-font text-black-800">
           {{ 'LOGIN.SUBTITLE' | translate }}
         </div>
       </div>
@@ -142,9 +142,7 @@ export class LoginComponent implements OnInit {
     this.authService.signupWithUsernamePassword(username, password).subscribe({
       next: (response) => {
         this.translate.get('LOGIN.APP_STATE_REINIT').subscribe((res: string) => {
-          this.snackbar.open(res, this.translate.instant('COMMON.DONE'), {
-            duration: 3000,
-          });
+          this.snackbar.open(res, this.translate.instant('COMMON.OK'), { duration: 3000 });
         });
         window.location.replace('/');
       },
@@ -152,9 +150,9 @@ export class LoginComponent implements OnInit {
         const e = error.message;
         if (typeof e === 'string') {
           this.errors = [e];
-          this.snackbar.open(e, this.translate.instant('COMMON.CANCEL'), {
+          this.snackbar.open(e, this.translate.instant('COMMON.OK'), {
             duration: 3000,
-            panelClass: ['bg-red-600', 'text-white'],
+            panelClass: ['snackbar-accent-action'],
           });
         } else {
           this.errors = [...(error.error.message || this.translate.instant('LOGIN.SOMETHING_WENT_WRONG'))];
@@ -169,9 +167,7 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         const { redirectTo } = this.route.snapshot.queryParams;
         this.translate.get('LOGIN.YOU_ARE_LOGGED_IN').subscribe((res: string) => {
-          this.snackbar.open(res, this.translate.instant('COMMON.DONE'), {
-            duration: 3000,
-          });
+          this.snackbar.open(res, this.translate.instant('COMMON.OK'), { duration: 3000 });
         });
         window.location.replace(redirectTo || '/');
       },
@@ -179,9 +175,9 @@ export class LoginComponent implements OnInit {
         const e = error.message;
         if (typeof e === 'string') {
           this.errors = [e];
-          this.snackbar.open(e, this.translate.instant('COMMON.CANCEL'), {
+          this.snackbar.open(e, this.translate.instant('COMMON.OK'), {
             duration: 3000,
-            panelClass: ['bg-red-600', 'text-white'],
+            panelClass: ['snackbar-accent-action'],
           });
         } else {
           this.errors = [...(error.error.message || this.translate.instant('LOGIN.SOMETHING_WENT_WRONG'))];
