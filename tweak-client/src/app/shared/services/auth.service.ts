@@ -10,7 +10,7 @@ import {
 import { handleError } from 'src/app/shared/utils/error-handle.utils';
 
 export type UserSettings = {
-  language: 'en' | 'es';
+  language: 'en' | 'es' | 'de';
   weekStartsOn: 'monday' | 'sunday';
   dateFormat: 'DD-MM' | 'MM-DD';
 };
@@ -153,7 +153,9 @@ export class AuthService {
         username: '',
         settings: {
           ...DEFAULT_USER_SETTINGS,
-          language: legacyLang === 'es' ? 'es' : DEFAULT_USER_SETTINGS.language,
+          language: (['en', 'es', 'de'] as const).includes(legacyLang as any)
+              ? (legacyLang as UserSettings['language'])
+              : DEFAULT_USER_SETTINGS.language,
         },
       };
     }
@@ -189,7 +191,9 @@ export class AuthService {
 
   private normalizeSettings(settingsLike: Partial<UserSettings> & { language?: string; weekStartsOn?: string; dateFormat?: string }): UserSettings {
     return {
-      language: settingsLike.language === 'es' ? 'es' : DEFAULT_USER_SETTINGS.language,
+      language: (['en', 'es', 'de'] as const).includes(settingsLike.language as any)
+        ? (settingsLike.language as UserSettings['language'])
+        : DEFAULT_USER_SETTINGS.language,
       weekStartsOn:
         settingsLike.weekStartsOn === 'sunday'
           ? 'sunday'

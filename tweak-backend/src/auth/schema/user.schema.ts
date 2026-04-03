@@ -23,7 +23,7 @@ export class User {
 
   @Prop({
     type: SchemaTypes.String,
-    enum: ['en', 'es'],
+    enum: ['en', 'es', 'de'],
     default: DEFAULT_USER_SETTINGS.language,
   })
   language: string;

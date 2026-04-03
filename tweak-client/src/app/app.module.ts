@@ -1,6 +1,7 @@
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
+import localeDe from '@angular/common/locales/de';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,6 +20,7 @@ import { DatepickerLocaleService } from './shared/intl/datepicker-locale.service
 import { TranslateDatepickerIntl } from './shared/intl/translate-datepicker-intl.service';
 
 registerLocaleData(localeEs, 'es-ES');
+registerLocaleData(localeDe, 'de-DE');
 
 export function localeIdFactory(): string {
   const locale = resolveLocaleFromStorage() ?? resolveLocaleFromNavigator();
@@ -29,6 +31,7 @@ const DEFAULT_LOCALE = 'en-US';
 const LANGUAGE_LOCALE_MAP: Record<string, string> = {
   en: 'en-US',
   es: 'es-ES',
+  de: 'de-DE',
 };
 
 function resolveLocaleFromStorage(): string | undefined {

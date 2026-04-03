@@ -1,0 +1,73 @@
+{
+  "LOGIN": {
+    "TITLE": "Tweak Planner",
+    "SUBTITLE": "Plane deine Woche wie in alten Zeiten. 👨🏻‍💻",
+    "USERNAME": "Benutzername",
+    "PASSWORD": "Passwort",
+    "BTN_LOGIN": "Anmelden",
+    "BTN_SIGNUP": "Registrieren",
+    "ALREADY_HAVE": "Bereits ein Konto?",
+    "DO_NOT_HAVE": "Noch kein Konto?",
+    "FORGOT_PASSWORD": "Passwort vergessen?",
+    "RESET_PASSWORD": "Passwort zurücksetzen",
+    "USERNAME_REQUIRED_1": "Benutzername ist erforderlich!",
+    "USERNAME_REQUIRED_2": "Benutzername ist <strong>erforderlich</strong>",
+    "PASSWORD_REQUIRED_1": "Passwort ist erforderlich!",
+    "PASSWORD_REQUIRED_2": "Passwort ist <strong>erforderlich</strong>",
+    "APP_STATE_REINIT": "App-Zustand neu initialisiert",
+    "YOU_ARE_LOGGED_IN": "Du bist angemeldet",
+    "SOMETHING_WENT_WRONG": "etwas ist schiefgelaufen!"
+  },
+  "HEADER": {
+    "PROFILE": "Profil",
+    "ACCOUNT": "Konto",
+    "MOVE_UNFINISHED": "Unerledigte Aufgaben verschieben",
+    "LOGOUT": "Abmelden",
+    "ROLLOVER_COMPLETE": "🚀 Übertrag abgeschlossen! {{count}} Aufgaben auf heute verschoben.",
+    "NO_UNFINISHED": "✅ Keine unerledigten Aufgaben zum Verschieben."
+  },
+  "CALENDER": {
+    "PLAN_YOUR_DAY": "Plane deinen Tag 🙌",
+    "SOMEDAY": "Irgendwann",
+    "TODO_DESCRIPTION_LABEL": "Aufgabenbeschreibung...",
+    "IS_PRIORITY": "Priorität?",
+    "ADD_TODO": "Aufgabe hinzufügen",
+    "DELETE_BTN": "Löschen",
+    "SCHEDULE_DELETED": "Aufgabe wurde gelöscht.",
+    "SCHEDULE_RESTORED": "Aufgabe wurde wiederhergestellt.",
+    "TODO_LABEL": "Deine Aufgabe",
+    "DATE_LABEL": "Datum:",
+    "ASSIGN_COLOR_LABEL": "Farbe zuweisen:",
+    "NOTES_PLACEHOLDER": "Füge hier zusätzliche Notizen hinzu..",
+    "DATE_PICKER": {
+      "OPEN_CALENDAR": "Kalender öffnen",
+      "CALENDAR": "Kalender",
+      "PREVIOUS_MONTH": "Vorheriger Monat",
+      "NEXT_MONTH": "Nächster Monat",
+      "SWITCH_TO_MONTH_VIEW": "Zur Monatsansicht wechseln",
+      "SWITCH_TO_MULTI_YEAR_VIEW": "Zur Jahresübersicht wechseln"
+    }
+  },
+  "COMMON": {
+    "OK": "OK",
+    "LANGUAGE": "Sprache",
+    "WEEK_STARTS_ON": "Woche beginnt am",
+    "DATE_FORMAT": "Datumsformat",
+    "MONDAY": "Montag",
+    "SUNDAY": "Sonntag",
+    "ENGLISH": "Englisch",
+    "SPANISH": "Spanisch",
+    "GERMAN": "Deutsch",
+    "CANCEL": "Abbrechen",
+    "DELETE": "Löschen",
+    "EDIT": "Bearbeiten",
+    "SAVE": "Speichern",
+    "YES": "Ja",
+    "NO": "Nein",
+    "UNDO": "Rückgängig",
+    "DELETE_CONFIRM_TITLE": "Aufgabe löschen?",
+    "DELETE_CONFIRM_MESSAGE": "Diese Aktion kann nicht rückgängig gemacht werden. Das Löschen der Aufgabe führt auch zum Verlust der Notiz.",
+    "DELETE_CONFIRM_YES": "Ja, bitte",
+    "DELETE_CONFIRM_NO": "Nein, ich behalte sie"
+  }
+}

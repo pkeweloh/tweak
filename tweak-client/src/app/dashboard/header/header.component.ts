@@ -83,6 +83,7 @@ import { AccountDialogComponent } from './account-dialog.component';
           <mat-menu #langSubMenu="matMenu" panelClass="custom-menu-panel">
             <button mat-menu-item (click)="useLanguage('en')">English</button>
             <button mat-menu-item (click)="useLanguage('es')">Español</button>
+            <button mat-menu-item (click)="useLanguage('de')">Deutsch</button>
           </mat-menu>
         </div>
 
@@ -153,7 +154,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void { }
 
   useLanguage(language: string) {
-    this.authService.updateSettings({ language: language as 'en' | 'es' }).subscribe({
+    this.authService.updateSettings({ language: language as 'en' | 'es' | 'de' }).subscribe({
       next: () => {
         this.translate.use(language);
         window.location.reload();
@@ -185,8 +186,8 @@ export class HeaderComponent implements OnInit {
   }
 
   formatMonthYear(month: number, year: number) {
-    const locale =
-      this.authService.userAuthState.settings.language === 'es' ? 'es-ES' : 'en-US';
+    const localeMap: Record<string, string> = { en: 'en-US', es: 'es-ES', de: 'de-DE' };
+    const locale = localeMap[this.authService.userAuthState.settings.language] ?? 'en-US';
 
     const monthLabel = new Intl.DateTimeFormat(locale, {
       month: 'long',

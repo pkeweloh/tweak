@@ -29,6 +29,7 @@ import {
             >
               <option value="en">{{ 'COMMON.ENGLISH' | translate }}</option>
               <option value="es">{{ 'COMMON.SPANISH' | translate }}</option>
+              <option value="de">{{ 'COMMON.GERMAN' | translate }}</option>
             </select>
             <i class="fa fa-chevron-down setting-select__icon" aria-hidden="true"></i>
           </div>
