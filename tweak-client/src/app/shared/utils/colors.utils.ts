@@ -9,6 +9,5 @@ export class ColorUtils {
     'bg-amber',
     'bg-green',
     'bg-fuchsia',
-    'bg-indigo text-white',
   ];
 }

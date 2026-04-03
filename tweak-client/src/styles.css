@@ -127,10 +127,6 @@ body {
   background-color: rgb(217, 92, 254);
 }
 
-.bg-indigo {
-  background-color: #6366f1;
-}
-
 /* Columns */
 .col-span-2 {
   grid-column: span 6 / span 6;
