@@ -318,6 +318,10 @@
   visibility: hidden !important;
 }
 
+::ng-deep .past-date .mat-calendar-body-cell-content:not(.mat-calendar-body-selected) {
+  color: rgba(0, 0, 0, 0.38);
+}
+
 .notes-section {
   padding: 0 8px;
   display: flex;

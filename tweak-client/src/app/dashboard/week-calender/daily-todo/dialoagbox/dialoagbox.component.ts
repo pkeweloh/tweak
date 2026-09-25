@@ -10,7 +10,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { WeekSchedulerService } from 'src/app/shared/services/week-scheduler.service';
 import { ColorUtils } from 'src/app/shared/utils/colors.utils';
 import { Schedule } from 'src/app/shared/utils/types.utils';
-import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import {
+  MatCalendarCellClassFunction,
+  MatDatepicker,
+  MatDatepickerInputEvent,
+} from '@angular/material/datepicker';
 
 type FormatAction = 'header' | 'bold' | 'list' | 'quote' | 'link';
 
@@ -87,11 +91,10 @@ type FormatAction = 'header' | 'bold' | 'list' | 'quote' | 'link';
             matInput
             formControlName="date"
             [matDatepicker]="datepicker"
-            [matDatepickerFilter]="checkNotToProvidePreviousWeek"
             class="hidden-datepicker"
             (dateChange)="onCalendarDateChange($event)"
           />
-          <mat-datepicker #datepicker></mat-datepicker>
+          <mat-datepicker #datepicker [dateClass]="pastDateClass"></mat-datepicker>
         </div>
 
         <div class="todo-field">
@@ -390,13 +393,12 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  checkNotToProvidePreviousWeek(d: Date | null) {
-    const thresoldDate: Date = new Date(
-      new Date().setDate(new Date().getDate() - new Date().getDay())
-    );
-    const date = d || new Date();
-    return date >= thresoldDate;
-  }
+  pastDateClass: MatCalendarCellClassFunction<Date> = (date, view) => {
+    if (view !== 'month') return '';
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today ? 'past-date' : '';
+  };
 
   onSave() {
     this.syncNotesFromEditor();
