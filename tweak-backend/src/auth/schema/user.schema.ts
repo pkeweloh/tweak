@@ -5,7 +5,10 @@ export const DEFAULT_USER_SETTINGS = {
   language: 'en',
   weekStartsOn: 'monday',
   dateFormat: 'DD-MM',
+  calendarFeedDays: 30,
 } as const;
+
+export const CALENDAR_FEED_DAYS = [7, 14, 30, 90] as const;
 
 @Schema({ collection: 'users' })
 export class User {
@@ -41,6 +44,15 @@ export class User {
     default: DEFAULT_USER_SETTINGS.dateFormat,
   })
   dateFormat: string;
+
+  @Prop({
+    type: SchemaTypes.Number,
+    default: DEFAULT_USER_SETTINGS.calendarFeedDays,
+  })
+  calendarFeedDays: number;
+
+  @Prop({ type: SchemaTypes.String, default: null, index: true, sparse: true })
+  calendarToken: string | null;
 
   @Prop({ type: SchemaTypes.Date, default: () => Date.now() })
   createdAt: Date;

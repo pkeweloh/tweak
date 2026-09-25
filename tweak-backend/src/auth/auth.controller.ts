@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   Patch,
@@ -42,6 +43,24 @@ export class AuthController {
   @UseGuards(AuthGuard())
   async me(@GetUser() user: User) {
     return this.authService.getCurrentUser(user.username);
+  }
+
+  @Get('calendar-feed')
+  @UseGuards(AuthGuard())
+  async getCalendarFeed(@GetUser() user: User) {
+    return this.authService.getCalendarToken(user.username);
+  }
+
+  @Post('calendar-feed')
+  @UseGuards(AuthGuard())
+  async createCalendarFeed(@GetUser() user: User) {
+    return this.authService.setCalendarToken(user.username, true);
+  }
+
+  @Delete('calendar-feed')
+  @UseGuards(AuthGuard())
+  async deleteCalendarFeed(@GetUser() user: User) {
+    return this.authService.setCalendarToken(user.username, false);
   }
 
   @Patch('settings')

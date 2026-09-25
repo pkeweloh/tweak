@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { randomBytes } from 'crypto';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import {
@@ -29,6 +30,7 @@ type AuthResponse = {
     language: string;
     weekStartsOn: string;
     dateFormat: string;
+    calendarFeedDays: number;
   };
 };
 
@@ -124,6 +126,27 @@ export class AuthService {
     return this.serializeUser(user);
   }
 
+  async getCalendarToken(username: string) {
+    const user = await this.userModel.findOne({ username });
+    if (!user) {
+      throw new NotFoundException(`${username} does not exists!`);
+    }
+    return { token: user.calendarToken || null };
+  }
+
+  async setCalendarToken(username: string, enabled: boolean) {
+    const token = enabled ? randomBytes(32).toString('hex') : null;
+    const user = await this.userModel.findOneAndUpdate(
+      { username },
+      { $set: { calendarToken: token } },
+      { new: true },
+    );
+    if (!user) {
+      throw new NotFoundException(`${username} does not exists!`);
+    }
+    return { token };
+  }
+
   private buildAuthResponse(user: UserDocument, accessToken: string): AuthResponse {
     return {
       accessToken,
@@ -137,6 +160,8 @@ export class AuthService {
       language: user.language || DEFAULT_USER_SETTINGS.language,
       weekStartsOn: user.weekStartsOn || DEFAULT_USER_SETTINGS.weekStartsOn,
       dateFormat: user.dateFormat || DEFAULT_USER_SETTINGS.dateFormat,
+      calendarFeedDays:
+        user.calendarFeedDays || DEFAULT_USER_SETTINGS.calendarFeedDays,
     };
   }
 }

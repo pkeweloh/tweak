@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { CalendarModule } from './calendar/calendar.module';
 import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
@@ -21,6 +22,7 @@ import { ScheduleModule } from './schedule/schedule.module';
     }),
     AuthModule,
     ScheduleModule,
+    CalendarModule,
   ],
   controllers: [AppController],
   providers: [AppService],
