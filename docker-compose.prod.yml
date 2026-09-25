@@ -1,0 +1,63 @@
+name: tweak
+
+networks:
+  traefik-public:
+    external: true
+
+services:
+  api:
+    container_name: tweak-api
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: tweak-backend/Dockerfile
+      target: prod
+    environment:
+      DATABASE_URL: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@db:27017/tweak?authSource=admin"
+      JWT_TOKEN: ${JWT_TOKEN:?JWT_TOKEN is required}
+      SIGNUP_ENABLED: ${SIGNUP_ENABLED:-false}
+      CORS_ORIGINS: https://${APP_DOMAIN:?APP_DOMAIN is required}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    container_name: tweak-web
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: tweak-client/Dockerfile
+      target: prod
+    depends_on:
+      - api
+    networks:
+      - default
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+      - "traefik.http.routers.tweak.rule=Host(`${APP_DOMAIN}`)"
+      - "traefik.http.routers.tweak.entrypoints=websecure"
+      - "traefik.http.routers.tweak.tls.certresolver=letsencrypt"
+      - "traefik.http.services.tweak.loadbalancer.server.port=80"
+
+  db:
+    container_name: tweak-db
+    image: mongo:5.0
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:?MONGO_INITDB_ROOT_USERNAME is required}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:?MONGO_INITDB_ROOT_PASSWORD is required}
+    healthcheck:
+      test: ["CMD", "mongo", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - db_data:/data/db
+
+volumes:
+  db_data:

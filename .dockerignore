@@ -1,5 +1,12 @@
-Dockerfile
+**/node_modules
+**/dist
+**/.angular
+**/coverage
+.git
+.history
+.claude
 .vscode
-node_modules
-.DS_Store
-package-lock.json
+.idea
+.env
+backups
+**/.DS_Store
