@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -13,6 +21,9 @@ export class AuthController {
 
   @Post('sign-up')
   async signup(@Body() createUserDto: CreateUserDto) {
+    if (process.env.SIGNUP_ENABLED === 'false') {
+      throw new ForbiddenException('Sign-up is disabled');
+    }
     return this.authService.signupWithUsernamePassword(createUserDto);
   }
 
