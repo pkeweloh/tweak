@@ -134,6 +134,7 @@ export class ScheduleService {
       {
         username: user.username,
         finished: false,
+        isSomeday: null,
         date: { $lt: today },
       },
       {
