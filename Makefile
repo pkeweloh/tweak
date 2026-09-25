@@ -1,10 +1,10 @@
 DC := docker compose -f docker-compose.prod.yml
 DB_AUTH := -u "$$MONGO_INITDB_ROOT_USERNAME" -p "$$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin
 
-.PHONY: help build up down restart ps logs logs-api logs-web sh-api sh-db deploy backup restore
+.PHONY: help build up down restart ps logs logs-api logs-web sh-api sh-db deploy backup backup-daily restore
 
 help: ## List targets
-	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-10s %s\n", $$1, $$2}'
+	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
 
 build: ## Rebuild images and start the stack
 	$(DC) build && $(DC) up -d --remove-orphans
@@ -45,6 +45,9 @@ backup: ## Dump the database to backups/
 	@mkdir -p backups
 	$(DC) exec -T db sh -c 'mongodump --quiet --archive --gzip $(DB_AUTH) --db tweak' > backups/tweak_$$(date +%Y%m%d_%H%M%S).archive.gz
 	@ls -lh backups | tail -1
+
+backup-daily: ## Daily dump with rotation and optional BACKUP_REMOTE sync
+	bash scripts/backup.sh
 
 restore: ## Replace the database with a dump: make restore FILE=backups/xxx.archive.gz
 	@test -n "$(FILE)" || (echo "usage: make restore FILE=backups/xxx.archive.gz" && exit 1)

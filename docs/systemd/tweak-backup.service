@@ -1,0 +1,9 @@
+[Unit]
+Description=Tweak DB backup: dump to /opt/tweak/backups, rotate, sync to BACKUP_REMOTE
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/tweak
+ExecStart=/usr/bin/bash /opt/tweak/scripts/backup.sh
