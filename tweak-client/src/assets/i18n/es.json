@@ -48,6 +48,17 @@
       "SWITCH_TO_MULTI_YEAR_VIEW": "Cambiar a vista multianual"
     }
   },
+  "CALENDAR_FEED": {
+    "TITLE": "Calendario (feed)",
+    "HINT": "Enlace privado para ver tus tareas en Thunderbird u otra app de calendario (solo lectura). Cualquiera con el enlace puede verlas.",
+    "ENABLE": "Activar",
+    "COPY": "Copiar enlace",
+    "COPIED": "¡Copiado!",
+    "REGENERATE": "Regenerar",
+    "DISABLE": "Desactivar",
+    "COMPLETED_DAYS": "Tareas completadas en el feed",
+    "DAYS": "Últimos {{count}} días"
+  },
   "COMMON": {
     "OK": "Aceptar",
     "LANGUAGE": "Idioma",

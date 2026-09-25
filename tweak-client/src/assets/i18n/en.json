@@ -48,6 +48,17 @@
       "SWITCH_TO_MULTI_YEAR_VIEW": "Switch to multi-year view"
     }
   },
+  "CALENDAR_FEED": {
+    "TITLE": "Calendar feed",
+    "HINT": "Private link to see your tasks in Thunderbird or any calendar app (read-only). Anyone with the link can see them.",
+    "ENABLE": "Enable",
+    "COPY": "Copy link",
+    "COPIED": "Copied!",
+    "REGENERATE": "Regenerate",
+    "DISABLE": "Disable",
+    "COMPLETED_DAYS": "Completed tasks in the feed",
+    "DAYS": "Last {{count}} days"
+  },
   "COMMON": {
     "OK": "OK",
     "LANGUAGE": "Language",

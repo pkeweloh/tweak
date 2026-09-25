@@ -13,7 +13,10 @@ export type UserSettings = {
   language: 'en' | 'es' | 'de';
   weekStartsOn: 'monday' | 'sunday';
   dateFormat: 'DD-MM' | 'MM-DD';
+  calendarFeedDays: 7 | 14 | 30 | 90;
 };
+
+export const CALENDAR_FEED_DAYS: UserSettings['calendarFeedDays'][] = [7, 14, 30, 90];
 
 export type AuthState = {
   accessToken: string;
@@ -29,6 +32,7 @@ export type AuthResponse = {
     language: UserSettings['language'];
     weekStartsOn: UserSettings['weekStartsOn'];
     dateFormat: UserSettings['dateFormat'];
+    calendarFeedDays: UserSettings['calendarFeedDays'];
   };
 };
 
@@ -36,6 +40,7 @@ const DEFAULT_USER_SETTINGS: UserSettings = {
   language: 'en',
   weekStartsOn: 'monday',
   dateFormat: 'DD-MM',
+  calendarFeedDays: 30,
 };
 
 @Injectable({
@@ -127,6 +132,24 @@ export class AuthService {
     );
   }
 
+  getCalendarFeed() {
+    return this.http
+      .get<{ token: string | null }>(`/api/auth/calendar-feed`)
+      .pipe(catchError(handleError));
+  }
+
+  enableCalendarFeed() {
+    return this.http
+      .post<{ token: string | null }>(`/api/auth/calendar-feed`, {})
+      .pipe(catchError(handleError));
+  }
+
+  disableCalendarFeed() {
+    return this.http
+      .delete<{ token: string | null }>(`/api/auth/calendar-feed`)
+      .pipe(catchError(handleError));
+  }
+
   getInitialLanguage(): UserSettings['language'] {
     return this.userAuthState.settings.language;
   }
@@ -189,7 +212,7 @@ export class AuthService {
     };
   }
 
-  private normalizeSettings(settingsLike: Partial<UserSettings> & { language?: string; weekStartsOn?: string; dateFormat?: string }): UserSettings {
+  private normalizeSettings(settingsLike: Partial<UserSettings> & { language?: string; weekStartsOn?: string; dateFormat?: string; calendarFeedDays?: number }): UserSettings {
     return {
       language: (['en', 'es', 'de'] as const).includes(settingsLike.language as any)
         ? (settingsLike.language as UserSettings['language'])
@@ -202,6 +225,9 @@ export class AuthService {
         settingsLike.dateFormat === 'MM-DD'
           ? 'MM-DD'
           : DEFAULT_USER_SETTINGS.dateFormat,
+      calendarFeedDays: CALENDAR_FEED_DAYS.includes(settingsLike.calendarFeedDays as any)
+        ? (settingsLike.calendarFeedDays as UserSettings['calendarFeedDays'])
+        : DEFAULT_USER_SETTINGS.calendarFeedDays,
     };
   }
 
