@@ -15,6 +15,7 @@ services:
     environment:
       DATABASE_URL: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@db:27017/tweak?authSource=admin"
       JWT_TOKEN: ${JWT_TOKEN:?JWT_TOKEN is required}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-30d}
       SIGNUP_ENABLED: ${SIGNUP_ENABLED:-false}
       CORS_ORIGINS: https://${APP_DOMAIN:?APP_DOMAIN is required}
     depends_on:

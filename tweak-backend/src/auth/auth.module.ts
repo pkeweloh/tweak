@@ -18,7 +18,7 @@ import { User, UserSchema } from './schema/user.schema';
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('JWT_TOKEN'),
         signOptions: {
-          expiresIn: '1d',
+          expiresIn: configService.get('JWT_EXPIRES_IN') || '30d',
         },
       }),
     }),
