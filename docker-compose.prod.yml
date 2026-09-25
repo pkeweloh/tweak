@@ -45,6 +45,7 @@ services:
     container_name: tweak-db
     image: mongo:5.0
     restart: unless-stopped
+    command: ["--wiredTigerCacheSizeGB", "0.25"]
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:?MONGO_INITDB_ROOT_USERNAME is required}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:?MONGO_INITDB_ROOT_PASSWORD is required}
