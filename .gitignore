@@ -34,6 +34,7 @@ chrome-profiler-events*.json
 !.vscode/extensions.json
 .history/*
 .claude
+CLAUDE.md
 
 # misc
 /.angular/cache
