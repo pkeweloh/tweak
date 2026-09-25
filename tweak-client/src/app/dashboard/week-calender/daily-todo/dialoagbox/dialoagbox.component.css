@@ -310,8 +310,12 @@
   padding: 0 !important;
 }
 
-::ng-deep .mat-calendar-body .mat-calendar-body-label {
+::ng-deep .mat-calendar-body tr[aria-hidden="true"] {
   display: none !important;
+}
+
+::ng-deep .mat-calendar-body .mat-calendar-body-label {
+  visibility: hidden !important;
 }
 
 .notes-section {
