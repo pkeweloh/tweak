@@ -4,6 +4,13 @@ DB_AUTH := -u "$$MONGO_INITDB_ROOT_USERNAME" -p "$$MONGO_INITDB_ROOT_PASSWORD" -
 .PHONY: help build up down restart ps logs logs-api logs-web sh-api sh-db deploy backup backup-daily restore
 
 help: ## List targets
+	@printf '%s\n' \
+		'  _____                    _    ' \
+		' |_   _|_      _____  __ _| | __' \
+		'   | | \ \ /\ / / _ \/ _` | |/ /' \
+		'   | |  \ V  V /  __/ (_| |   < ' \
+		'   |_|   \_/\_/ \___|\__,_|_|\_\' \
+		''
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
 
 build: ## Rebuild images and start the stack
