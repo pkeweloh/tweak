@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from 'src/auth/schema/user.schema';
-import {
-  Schedule,
-  ScheduleSchema,
-} from 'src/schedule/schema/schedule.schema';
+import { Schedule, ScheduleSchema } from 'src/schedule/schema/schedule.schema';
+import { CaldavController } from './caldav.controller';
+import { CaldavService } from './caldav.service';
 import { CalendarController } from './calendar.controller';
 import { CalendarService } from './calendar.service';
 
@@ -15,7 +14,7 @@ import { CalendarService } from './calendar.service';
       { name: Schedule.name, schema: ScheduleSchema },
     ]),
   ],
-  controllers: [CalendarController],
-  providers: [CalendarService],
+  controllers: [CalendarController, CaldavController],
+  providers: [CalendarService, CaldavService],
 })
 export class CalendarModule {}

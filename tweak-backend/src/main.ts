@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { text } from 'express';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -11,6 +12,17 @@ async function bootstrap() {
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);
+  app.use('/api/caldav', text({ type: () => true, limit: '1mb' }));
+  app.use('/api/caldav', (req, res, next) => {
+    if (req.method !== 'OPTIONS') {
+      return next();
+    }
+    res.set({
+      DAV: '1, 3, calendar-access',
+      Allow: 'OPTIONS, GET, HEAD, PROPFIND, REPORT, PUT, DELETE',
+    });
+    res.status(200).end();
+  });
   app.enableCors({ origin: corsOrigins });
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());

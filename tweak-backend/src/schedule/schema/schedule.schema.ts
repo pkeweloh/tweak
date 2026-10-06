@@ -60,6 +60,18 @@ export class Schedule {
     default: null,
   })
   isSomeday: number;
+
+  @Prop({
+    type: SchemaTypes.String,
+    default: null,
+  })
+  ical: string | null;
+
+  @Prop({
+    type: SchemaTypes.String,
+    default: null,
+  })
+  icalHref: string | null;
 }
 
 export type ScheduleDocument = User & Document;
