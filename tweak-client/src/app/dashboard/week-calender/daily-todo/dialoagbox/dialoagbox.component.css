@@ -408,11 +408,35 @@
   white-space: pre-wrap;
 }
 
-:host ::ng-deep .notes-editor h4 {
-  font-size: 1.25rem;
+:host ::ng-deep .notes-editor :is(h1, h2, h3, h4, h5, h6) {
   font-weight: 700;
   margin: 0 0 0.35rem;
   color: #0f172a;
+}
+
+:host ::ng-deep .notes-editor h1 {
+  font-size: 1.5rem;
+}
+
+:host ::ng-deep .notes-editor h2 {
+  font-size: 1.25rem;
+}
+
+:host ::ng-deep .notes-editor h3 {
+  font-size: 1.125rem;
+}
+
+:host ::ng-deep .notes-editor h4 {
+  font-size: 1rem;
+}
+
+:host ::ng-deep .notes-editor h5 {
+  font-size: 0.9rem;
+}
+
+:host ::ng-deep .notes-editor h6 {
+  font-size: 0.85rem;
+  color: #475467;
 }
 
 :host ::ng-deep .notes-editor strong,
@@ -421,8 +445,7 @@
   color: #111827;
 }
 
-:host ::ng-deep .notes-editor h4 strong,
-:host ::ng-deep .notes-editor h4 b {
+:host ::ng-deep .notes-editor :is(h1, h2, h3, h4, h5, h6) :is(strong, b) {
   font-weight: inherit;
 }
 

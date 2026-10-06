@@ -630,7 +630,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
       if (tag === 'blockquote') {
         const innerBlocks = Array.from(element.children).filter((inner) =>
-          ['div', 'p', 'h4'].includes(inner.tagName.toLowerCase())
+          ['div', 'p', 'h2'].includes(inner.tagName.toLowerCase())
         ) as HTMLElement[];
         if (innerBlocks.length) {
           blocks.push(...innerBlocks);
@@ -640,7 +640,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
         return;
       }
 
-      if (['p', 'div', 'h4'].includes(tag)) {
+      if (['p', 'div', 'h2'].includes(tag)) {
         blocks.push(element);
       }
     });
@@ -662,11 +662,11 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
           return element;
         }
 
-        if (['div', 'p', 'h4'].includes(tag) && parentTag === 'blockquote') {
+        if (['div', 'p', 'h2'].includes(tag) && parentTag === 'blockquote') {
           return element;
         }
 
-        if (['p', 'div', 'h4', 'blockquote'].includes(tag) && element.parentElement === editor) {
+        if (['p', 'div', 'h2', 'blockquote'].includes(tag) && element.parentElement === editor) {
           return element;
         }
       }
@@ -701,7 +701,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
       if (current.nodeType === Node.ELEMENT_NODE) {
         const element = current as HTMLElement;
         const tag = element.tagName.toLowerCase();
-        if (tag === 'li' || tag === 'h4' || tag === 'blockquote') {
+        if (tag === 'li' || tag === 'h2' || tag === 'blockquote') {
           return element;
         }
         if (!fallbackBlock && (tag === 'p' || tag === 'div')) {
@@ -724,7 +724,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
       return this.replaceWithList(block, html);
     }
 
-    const replacementTag = targetType === 'header' ? 'h4' : targetType === 'quote' ? 'blockquote' : 'p';
+    const replacementTag = targetType === 'header' ? 'h2' : targetType === 'quote' ? 'blockquote' : 'p';
     const replacement = document.createElement(replacementTag);
     replacement.innerHTML = html;
     this.replaceBlockNode(block, replacement);
@@ -773,7 +773,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
     const insertionPoint = this.getInsertionPointForBlocks(blocks);
     const parent = insertionPoint.parentNode;
     const fragment = document.createDocumentFragment();
-    const tagName = targetType === 'header' ? 'h4' : targetType === 'quote' ? 'blockquote' : 'p';
+    const tagName = targetType === 'header' ? 'h2' : targetType === 'quote' ? 'blockquote' : 'p';
     const createdBlocks: HTMLElement[] = [];
 
     blocks.forEach((block) => {
@@ -1220,7 +1220,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private getBlockType(block: HTMLElement): 'paragraph' | 'header' | 'quote' | 'list' {
     const tag = block.tagName.toLowerCase();
-    if (tag === 'h4') {
+    if (tag === 'h2') {
       return 'header';
     }
     if (tag === 'blockquote' || block.parentElement?.tagName.toLowerCase() === 'blockquote') {
@@ -1261,7 +1261,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const tag = block.tagName?.toLowerCase();
-    if (tag === 'h4') {
+    if (tag === 'h2') {
       return 'header';
     }
     if (tag === 'blockquote') {
@@ -1294,7 +1294,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
           (fontWeight === 'bold' ||
             fontWeight === 'bolder' ||
             (!Number.isNaN(numericWeight) && numericWeight >= 700)) &&
-          tag !== 'h4'
+          tag !== 'h2'
         ) {
           return true;
         }
@@ -1645,7 +1645,7 @@ export class DialoagboxComponent implements OnInit, AfterViewInit, OnDestroy {
       return false;
     }
 
-    return !!editor.querySelector('h4, blockquote, ul, li, b, strong, a');
+    return !!editor.querySelector('h2, blockquote, ul, li, b, strong, a');
   }
 
   generateColor(id: number) {
