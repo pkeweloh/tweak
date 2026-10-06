@@ -102,6 +102,24 @@
   font-family: inherit;
 }
 
+.feed-link__label {
+  display: block;
+  font-size: 0.78rem;
+  color: #374151;
+  padding: 4px 8px 0;
+}
+
+.feed-link__row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.feed-link__row .feed-url {
+  flex: 1;
+  min-width: 0;
+}
+
 .feed-url:focus {
   outline: none;
 }

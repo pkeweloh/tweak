@@ -77,16 +77,21 @@ import {
           </label>
           <div class="setting-row__hint">{{ 'CALENDAR_FEED.HINT' | translate }}</div>
           <ng-container *ngIf="feedToken; else feedOff">
-            <input
-              class="feed-url"
-              readonly
-              [value]="feedUrl"
-              (focus)="$any($event.target).select()"
-            />
+            <div class="feed-link" *ngFor="let link of feedLinks">
+              <span class="feed-link__label">{{ link.label | translate }}</span>
+              <div class="feed-link__row">
+                <input
+                  class="feed-url"
+                  readonly
+                  [value]="link.url"
+                  (focus)="$any($event.target).select()"
+                />
+                <button mat-button type="button" (click)="copyUrl(link.url)">
+                  {{ (copied === link.url ? 'CALENDAR_FEED.COPIED' : 'CALENDAR_FEED.COPY') | translate }}
+                </button>
+              </div>
+            </div>
             <div class="feed-actions">
-              <button mat-button type="button" (click)="copyFeedUrl()">
-                {{ (copied ? 'CALENDAR_FEED.COPIED' : 'CALENDAR_FEED.COPY') | translate }}
-              </button>
               <button mat-button type="button" [disabled]="feedBusy" (click)="enableFeed()">
                 {{ 'CALENDAR_FEED.REGENERATE' | translate }}
               </button>
@@ -145,7 +150,8 @@ export class AccountDialogComponent implements OnInit {
   saving = false;
   feedToken: string | null = null;
   feedBusy = false;
-  copied = false;
+  copied: string | null = null;
+  feedLinks: { label: string; url: string }[] = [];
   feedDaysOptions = CALENDAR_FEED_DAYS;
 
   form = new FormGroup({
@@ -167,13 +173,9 @@ export class AccountDialogComponent implements OnInit {
     private translate: TranslateService
   ) {}
 
-  get feedUrl() {
-    return `${window.location.origin}/api/calendar/${this.feedToken}/tweak.ics`;
-  }
-
   ngOnInit() {
     this.authService.getCalendarFeed().subscribe(({ token }) => {
-      this.feedToken = token;
+      this.setFeedToken(token);
     });
   }
 
@@ -185,19 +187,28 @@ export class AccountDialogComponent implements OnInit {
     this.updateFeed(this.authService.disableCalendarFeed());
   }
 
-  copyFeedUrl() {
-    navigator.clipboard?.writeText(this.feedUrl).then(() => {
-      this.copied = true;
-      setTimeout(() => (this.copied = false), 2000);
+  copyUrl(url: string) {
+    navigator.clipboard?.writeText(url).then(() => {
+      this.copied = url;
+      setTimeout(() => (this.copied = null), 2000);
     });
+  }
+
+  private setFeedToken(token: string | null) {
+    const base = `${window.location.origin}/api`;
+    this.feedToken = token;
+    this.feedLinks = [
+      { label: 'CALENDAR_FEED.CALDAV', url: `${base}/caldav/${token}/` },
+      { label: 'CALENDAR_FEED.ICS', url: `${base}/calendar/${token}/tweak.ics` },
+    ];
   }
 
   private updateFeed(request: Observable<{ token: string | null }>) {
     this.feedBusy = true;
     request.subscribe({
       next: ({ token }) => {
-        this.feedToken = token;
-        this.copied = false;
+        this.setFeedToken(token);
+        this.copied = null;
       },
       error: () => {
         this.feedBusy = false;

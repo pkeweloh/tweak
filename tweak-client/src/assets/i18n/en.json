@@ -49,10 +49,12 @@
     }
   },
   "CALENDAR_FEED": {
-    "TITLE": "Calendar feed",
-    "HINT": "Private link to see your tasks in Thunderbird or any calendar app (read-only). Anyone with the link can see them.",
+    "TITLE": "Calendar",
+    "HINT": "Private links to use your tasks in Thunderbird or any calendar app. With CalDAV you can also create, edit and delete them; the .ics link is read-only. Anyone with a link has that access.",
     "ENABLE": "Enable",
-    "COPY": "Copy link",
+    "CALDAV": "CalDAV (editable)",
+    "ICS": ".ics feed (read-only)",
+    "COPY": "Copy",
     "COPIED": "Copied!",
     "REGENERATE": "Regenerate",
     "DISABLE": "Disable",

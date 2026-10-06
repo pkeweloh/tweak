@@ -49,10 +49,12 @@
     }
   },
   "CALENDAR_FEED": {
-    "TITLE": "Kalender-Feed",
-    "HINT": "Privater Link, um deine Aufgaben in Thunderbird oder einer anderen Kalender-App zu sehen (nur lesen). Jeder mit dem Link kann sie sehen.",
+    "TITLE": "Kalender",
+    "HINT": "Private Links, um deine Aufgaben in Thunderbird oder einer anderen Kalender-App zu nutzen. Mit CalDAV kannst du sie auch anlegen, bearbeiten und löschen; der .ics-Link ist nur lesbar. Jeder mit einem Link hat diesen Zugriff.",
     "ENABLE": "Aktivieren",
-    "COPY": "Link kopieren",
+    "CALDAV": "CalDAV (bearbeitbar)",
+    "ICS": ".ics-Feed (nur lesen)",
+    "COPY": "Kopieren",
     "COPIED": "Kopiert!",
     "REGENERATE": "Neu erzeugen",
     "DISABLE": "Deaktivieren",
