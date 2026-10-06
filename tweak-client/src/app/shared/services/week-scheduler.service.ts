@@ -101,11 +101,15 @@ export class WeekSchedulerService implements OnDestroy {
   }
 
   updateSchedule(updatedSchedule: Partial<Schedule>) {
-    const { _id, colorCode, ...payload } = updatedSchedule;
+    const { _id, colorCode, date, ...payload } = updatedSchedule;
     return this.http
       .patch(
         `/api/schedules/update`,
-        { ...payload, colorCode: String(colorCode) },
+        {
+          ...payload,
+          ...(date && { date: this.toServerDate(new Date(date)) }),
+          colorCode: String(colorCode),
+        },
         {
           params: { id: _id as string },
         }

@@ -50,14 +50,15 @@ export class ScheduleService {
   }
 
   async findByWeek(user: User, from: Date, to: Date) {
-    const mfrom = new Date(from).toDateString();
-    const mto = new Date(to).toDateString();
+    const mfrom = new Date(new Date(from).toDateString());
+    const mto = new Date(new Date(to).toDateString());
+    mto.setDate(mto.getDate() + 1);
 
     const schedules = await this.scheduleModel
       .where({
         username: user.username,
         $or: [
-          { date: { $gte: mfrom, $lte: mto }, isSomeday: null },
+          { date: { $gte: mfrom, $lt: mto }, isSomeday: null },
           { isSomeday: { $ne: null } }
         ]
       })
@@ -71,7 +72,11 @@ export class ScheduleService {
   }
 
   async update(id: string, updateScheduleDto: UpdateScheduleDto) {
-    await this.scheduleModel.findOneAndUpdate({ _id: id }, updateScheduleDto);
+    const update = { ...updateScheduleDto };
+    if (update.date) {
+      update.date = new Date(update.date).toDateString();
+    }
+    await this.scheduleModel.findOneAndUpdate({ _id: id }, update);
     return { data: `schedule ${id} has been updated` };
   }
 
